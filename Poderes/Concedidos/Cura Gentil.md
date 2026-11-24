@@ -1,0 +1,27 @@
+---
+tipo: "poder"
+subtipo: "poder-concedido"
+categoria: "concedido"
+sistema: "tormenta20-jda"
+fonte: "Tormenta20 JdA"
+nome: "Cura Gentil"
+resumo: "Você soma seu Carisma aos PV restaurados por seus efeitos mágicos de cura."
+ativacao: "passivo-constante"
+natureza: "magica"
+subcategoria_tatica: "concedido"
+area_efeito: "pessoal"
+escala_por_nivel: false
+escala_por_poderes_tormenta: false
+deuses:
+  - "[[Lena]]"
+---
+# ⚡ Cura Gentil
+
+> [!t20-stats]
+> - 🏛️ <span class="t20-roxo">Divindades:</span> [[Lena]]
+> - ⚙️ <span class="t20-verde">Ativação:</span> Passivo Constante
+> - 💧 <span class="t20-ciano">Custo:</span> 0 PM
+
+Você soma seu Carisma aos PV restaurados por seus efeitos mágicos de cura.
+
+---

@@ -1,0 +1,43 @@
+{
+  "data_version": 2,
+  "command_timeout": 5,
+  "templates_folder": "Templates",
+  "templates_pairs": [
+    [
+      "Campanha/01_Sessões",
+      "Templates/Template Sessão"
+    ],
+    [
+      "Campanha/02_Personagens",
+      "Templates/Template Personagem PJ"
+    ],
+    [
+      "Campanha/03_NPCs e Ameaças",
+      "Templates/Template Ameaça e NPC"
+    ],
+    [
+      "Campanha/04_Locais e Masmorras",
+      "Templates/Template Local e Masmorra"
+    ],
+    [
+      "Campanha/05_Encontros e Combates",
+      "Templates/Template Encontro"
+    ]
+  ],
+  "trigger_on_file_creation_mode": "none",
+  "only_trigger_for_matching_files": false,
+  "auto_jump_to_cursor": true,
+  "jump_to_cursor_after_file_name": false,
+  "shell_path": "",
+  "user_scripts_folder": "",
+  "folder_templates": [],
+  "file_templates": [],
+  "syntax_highlighting": true,
+  "syntax_highlighting_mobile": false,
+  "enabled_templates_hotkeys": [],
+  "startup_templates": [],
+  "intellisense_render": "1",
+  "ignore_folders_on_creation": [],
+  "enable_user_system_commands": false,
+  "enabled_templates_hotkey": true
+}

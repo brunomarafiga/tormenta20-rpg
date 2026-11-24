@@ -1,0 +1,16 @@
+{
+  "settingsVersion": "1.9.2",
+  "logLevel": "warning",
+  "onlyExportModified": true,
+  "deleteOldFiles": true,
+  "exportPreset": "offline",
+  "openAfterExport": true,
+  "exportOptions": {
+    "siteName": "Tormenta 20 — Compêndio de Regras",
+    "themeName": "Current",
+    "inlineCSS": true,
+    "inlineJS": true,
+    "includePluginCss": true,
+    "offlineResources": true
+  }
+}

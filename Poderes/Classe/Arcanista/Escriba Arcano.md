@@ -1,0 +1,42 @@
+---
+tipo: "poder"
+subtipo: "poder-classe"
+categoria: "classe"
+sistema: "tormenta20-jda"
+fonte: "Tormenta20 JdA / Heróis de Arton"
+nome: "Escriba Arcano"
+resumo: "Você pode fabricar pergaminhos mágicos com suas magias conhecidas como se possuísse Escrever Pergaminho."
+ativacao: "passiva"
+natureza: "magica"
+subcategoria_tatica: "metamagia"
+area_efeito: "pessoal"
+escala_por_nivel: false
+escala_por_poderes_tormenta: false
+classe: "[[Arcanista]]"
+trilha_poder: "Mago"
+caminho_exclusivo: "Mago"
+ordem: 1
+requer_poder:
+  - "[[Caminho do Arcanista — Mago]]"
+---
+# ⚡ Escriba Arcano
+
+> [!t20-stats]
+> - 🏷️ <span class="t20-roxo">Tipo:</span> Poder de [[Arcanista]]
+> - 🔮 <span class="t20-ciano">Caminho / Restrição:</span> Mago
+> - 🌿 <span class="t20-azul">Trilha:</span> Mago
+> - 🎖️ <span class="t20-amarelo">Nível Mínimo:</span> 1º Nível
+> - 🔑 <span class="t20-verde">Pré-requisitos:</span> [[Caminho do Arcanista — Mago]]
+> - ✨ <span class="t20-rosa">Magias Vinculadas:</span> Nenhuma (Poder Geral de [[Poderes/Magia/Escrever Pergaminho|Escrever Pergaminho]])
+
+Você aprende a transcrever fórmulas mágicas em pergaminhos de uso rápido. Você pode criar pergaminhos como se possuísse o poder geral [[Poderes/Magia/Escrever Pergaminho|Escrever Pergaminho]], utilizando seu grimório e tintas especiais.
+
+---
+
+### 🔗 Poderes Dependentes
+```dataview
+LIST WITHOUT ID link(file.link) + " (" + trilha_poder + " — " + caminho_exclusivo + ")"
+FROM "Poderes/Classe/Arcanista"
+WHERE tipo = "poder" AND (contains(requer_poder, this.file.link) OR contains(string(requer_poder), this.file.name))
+SORT file.name ASC
+```

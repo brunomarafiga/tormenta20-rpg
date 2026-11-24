@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tormenta 20 — Compêndio & Referência Rápida</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header Principal -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-badge" id="btn-home-logo" role="button" tabindex="0" title="Voltar ao Início">
+        <span class="logo-icon">⚔️</span>
+        <div class="logo-text">
+          <span class="logo-title">TORMENTA 20</span>
+          <span class="logo-subtitle">Compêndio Canônico JdA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="global-search-trigger" id="btn-open-search" role="button" tabindex="0" title="Buscar em todo o cofre (Ctrl+K)">
+        <span class="search-icon">🔍</span>
+        <span class="search-placeholder">Buscar armas, magias, poderes, regras...</span>
+        <kbd class="shortcut-badge">Ctrl K</kbd>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button id="btn-toggle-conditions" class="btn btn-warning" title="Abrir consulta rápida de Condições e Penalidades">
+        <span class="btn-icon">⚠️</span> Condições
+      </button>
+      <button id="btn-theme-toggle" class="btn btn-icon-only" title="Alternar Tema Claro/Escuro" aria-label="Alternar tema">
+        <span id="theme-icon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Barra de Navegação Hierárquica (Breadcrumbs) -->
+  <nav class="nav-breadcrumbs-bar" aria-label="Navegação em trilha">
+    <button id="btn-nav-back" class="btn btn-secondary btn-sm" title="Voltar um nível">
+      <span class="arrow-back">←</span> Voltar
+    </button>
+    <ol id="breadcrumbs-list" class="breadcrumbs-list">
+      <!-- Inserido dinamicamente via app.js -->
+    </ol>
+  </nav>
+
+  <!-- Container Principal de Visualização -->
+  <main class="app-main">
+    <section id="view-container" class="view-container">
+      <!-- Telas dinâmicas renderizadas por app.js: Home, Cards de Nível, Tabelas -->
+    </section>
+  </main>
+
+  <!-- Painel Lateral de Detalhes (Drawer Direito) -->
+  <aside id="detail-drawer" class="drawer drawer-right" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-title-area">
+        <div class="drawer-badges" id="drawer-badges"></div>
+        <h2 id="drawer-title" class="drawer-title">Nome da Entidade</h2>
+      </div>
+      <button id="btn-close-drawer" class="btn-close" aria-label="Fechar painel" title="Fechar (Esc)">✕</button>
+    </div>
+    <div class="drawer-meta-bar" id="drawer-meta-bar"></div>
+    <div id="drawer-content" class="drawer-body">
+      <!-- Conteúdo HTML compilado da nota -->
+    </div>
+  </aside>
+
+  <!-- Painel Rápido de Condições (Drawer Esquerdo) -->
+  <aside id="conditions-drawer" class="drawer drawer-left" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-title-area">
+        <h2 class="drawer-title">⚠️ Condições & Penalidades</h2>
+        <span class="drawer-subtitle">Consulta rápida para combate e testes</span>
+      </div>
+      <button id="btn-close-conditions" class="btn-close" aria-label="Fechar painel">✕</button>
+    </div>
+    <div class="drawer-search-bar">
+      <input type="text" id="conditions-filter-input" placeholder="Filtrar por nome ou efeito (ex: Medo, Cegueira)..." class="input-search">
+    </div>
+    <div id="conditions-list-container" class="drawer-body conditions-body">
+      <!-- Lista interativa de condições renderizada via JS -->
+    </div>
+  </aside>
+
+  <!-- Modal de Busca Global (Ctrl + K) -->
+  <div id="search-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-search-label">
+    <div class="search-modal-card">
+      <div class="search-modal-header">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="global-search-input" placeholder="Digite para buscar em mais de 2.200 notas..." autocomplete="off">
+        <button id="btn-close-search" class="btn-close" aria-label="Fechar busca">✕</button>
+      </div>
+      <div class="search-modal-filters" id="search-domain-filters">
+        <button class="filter-chip active" data-filter="all">Todos</button>
+        <button class="filter-chip" data-filter="Itens">Itens</button>
+        <button class="filter-chip" data-filter="Magias">Magias</button>
+        <button class="filter-chip" data-filter="Poderes">Poderes</button>
+        <button class="filter-chip" data-filter="Classes">Classes</button>
+        <button class="filter-chip" data-filter="Raças">Raças</button>
+        <button class="filter-chip" data-filter="Deuses">Deuses</button>
+        <button class="filter-chip" data-filter="Origens">Origens</button>
+        <button class="filter-chip" data-filter="Condições">Condições</button>
+      </div>
+      <div id="search-results-list" class="search-results-list">
+        <!-- Resultados em tempo real -->
+      </div>
+      <div class="search-modal-footer">
+        <span>Use <strong>↑</strong> <strong>↓</strong> para navegar, <strong>Enter</strong> para selecionar, <strong>Esc</strong> para fechar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fundo escuro para fechar gavetas e modais -->
+  <div id="backdrop" class="app-backdrop hidden"></div>
+
+  <!-- Scripts: Catálogo local offline primeiro, depois aplicação JS -->
+  <script src="data/catalog.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

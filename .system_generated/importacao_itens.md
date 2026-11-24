@@ -1,0 +1,165 @@
+# Importação de Itens Suplementares
+
+Criados: 158
+Já existentes ou duplicados: 0
+
+## Criados
+
+- Ábaco
+- Ampulheta
+- Aparelho de chá
+- Astrolábio
+- Armação para mochila
+- Asas do texugo
+- Bainha adornada
+- Bússola
+- Cinto de utilidades
+- Condecoração militar
+- Dente falso
+- Diagrama anatômico
+- Espelho refletor
+- Estetoscópio
+- Estrepes (bolsa para 3m)
+- Favor da pessoa amada
+- Lampião de foco
+- Leque
+- Livro de métodos anti-Nimb
+- Lupa
+- Mapa
+- Mecanismo de mola
+- Mochila discreta
+- Prancheta
+- Sinete
+- Apito de caça
+- Baralho marcado
+- Espelho cirúrgico
+- Estandarte
+- Estandarte portátil
+- Molde pré-fabricado
+- Clarim deheoni
+- Cítara heptatônica
+- Cornamusa de Doherimm
+- Flauta sar-allan
+- Gaita de foles
+- Lira de casco de tartaruga
+- Marionetes
+- Pandeiro das estradas
+- Tamborete marcial
+- Trombeta tapistana
+- Violino soprano
+- Avental de forja
+- Camisolão
+- Capa com dragonas
+- Casaca de apetrechos
+- Chapéu emplumado
+- Elmo leve
+- Elmo pesado
+- Jaqueta de couro
+- Luva de falcoaria
+- Luva magnética
+- Máscara bucal
+- Máscara completa
+- Máscara de baile
+- Máscara de soldador
+- Monóculo
+- Óculos de aeronauta
+- Palmar
+- Peruca
+- Rondel
+- Roupão elegante
+- Rufo
+- Sapatos confortáveis
+- Sapatos de salto alto
+- Veste acolchoada
+- Ácido concentrado
+- Analgésico
+- Estalinho Gury
+- Extrato de gelo eterno
+- Extrato de oxxdon
+- Frasco abissal
+- Pó de cinza
+- Pó do aparecimento
+- Visco persistente
+- Cristal reflexivo
+- Essência fantasmal
+- Noz saltadora
+- Presa de Hyninn
+- Bolor hemorrágico
+- Fumaça onírica
+- Gás moroso
+- Seiva necrótica
+- Baba de troll
+- Barba queimada
+- Cerveja deheoni
+- Dilínio
+- Grogue negro
+- Grogue rubro
+- Hidromel uivante
+- Licor feérico
+- Sidra ahleniense
+- Vinho Pruss
+- Vinho élfico
+- Compasso místico
+- Flauta convocadora
+- Mandala onírica
+- Varinha armamentista
+- Armadura de montaria leve
+- Armadura de montaria pesada
+- Arreios namalkahnianos
+- Caparazão
+- Estribos
+- Ornamento
+- Barcaça
+- Biga de guerra
+- Dirigível goblin
+- Jangada
+- Veleiro
+- Algravia
+- Banquete de canceronte
+- Coc-au-triz
+- Cozido de serpe
+- Gorlegg ensopado
+- Omelete monstruosa
+- Sashimi de kraken
+- Bulette
+- Capivara
+- Corcel do deserto
+- Dromedário
+- Elefante
+- Hiena
+- Leão
+- Rinoceronte
+- Urso pardo
+- Caixa de voz
+- Corda de teia
+- Dente de wisphago
+- Ankh solar
+- Tomo de guerra
+- Tomo do rancor
+- Garra feroz
+- Manto do mantor
+- Manto pesado
+- Sombreiro
+- Traje selako
+- Bálsamo de drogadora
+- Bomba de fumaça
+- Elixir quimérico
+- Éter elemental
+- Isca putrefata
+- Lágrima pétrea
+- Óleo de baleia
+- Óleo de besouro
+- Pó azul
+- Corrosivo mineral
+- Gelo extremo
+- Pedaço de língua
+- Raio cristalizado
+- Esporos de cogumelo
+- Peçonha anciã
+- Peçonha irritante
+- Veneno batraquio
+- Balas (20)
+- Flechas (20)
+- Munição (20)
+- Virotes (20)
+- Pedras (20)

@@ -1,0 +1,262 @@
+/* ═══════════════════════════════════════════════
+   TORMENTA 20 — Snippet de Callouts e Badges
+   ═══════════════════════════════════════════════ */
+
+/* Barra horizontal de badges (sem título) */
+.callout[data-callout="t20-stats"] {
+  --callout-color: 220, 38, 38;
+  --callout-icon: lucide-sparkles;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+.callout[data-callout="t20-stats"] > .callout-title,
+.callout[data-callout="t20-stats"] .callout-title {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.callout[data-callout="t20-stats"] ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.callout[data-callout="t20-stats"] li {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.9em;
+  margin: 0;
+}
+
+/* Paleta Utilitária */
+.theme-dark {
+  --t20-laranja: #fbbf24;
+  --t20-ciano: #38bdf8;
+  --t20-roxo: #c4b5fd;
+  --t20-verde: #34d399;
+  --t20-vermelho: #f87171;
+  --t20-amarelo: #fde68a;
+  --t20-cinza: #d1d5db;
+}
+
+.theme-light {
+  --t20-laranja: #9a6700;
+  --t20-ciano: #075985;
+  --t20-roxo: #6d28d9;
+  --t20-verde: #047857;
+  --t20-vermelho: #b91c1c;
+  --t20-amarelo: #854d0e;
+  --t20-cinza: #4b5563;
+}
+
+.t20-laranja { color: var(--t20-laranja); font-weight: 600; }
+.t20-ciano   { color: var(--t20-ciano);   font-weight: 600; }
+.t20-roxo    { color: var(--t20-roxo);    font-weight: 600; }
+.t20-verde   { color: var(--t20-verde);   font-weight: 600; }
+.t20-vermelho{ color: var(--t20-vermelho);font-weight: 600; }
+.t20-amarelo { color: var(--t20-amarelo); font-weight: 600; }
+.t20-cinza   { color: var(--t20-cinza);   font-weight: 600; }
+
+/* Aliases Semânticos para Magias */
+.t20-exec { color: var(--t20-laranja); font-weight: 600; }
+.t20-alc  { color: var(--t20-ciano);   font-weight: 600; }
+.t20-area { color: var(--t20-roxo);    font-weight: 600; }
+.t20-dur  { color: var(--t20-verde);   font-weight: 600; }
+.t20-res  { color: var(--t20-vermelho);font-weight: 600; }
+
+/* Etiqueta de custo em PM */
+.t20-pm {
+  background: rgba(56, 189, 248, 0.18);
+  color: var(--color-blue, #38bdf8);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-weight: 700;
+  font-size: 0.85em;
+  margin-right: 4px;
+}
+
+/* Callouts Temáticos */
+.callout[data-callout="t20-magia"]     { --callout-color: 139, 92, 246; --callout-icon: lucide-sparkles; }
+.callout[data-callout="t20-pm"]        { --callout-color:  56, 189, 248; --callout-icon: lucide-flame; }
+.callout[data-callout="t20-poder"]     { --callout-color: 168,  85, 247; --callout-icon: lucide-shield; }
+.callout[data-callout="t20-restricao"] { --callout-color: 239,  68,  68; --callout-icon: lucide-alert-triangle; }
+.callout[data-callout="t20-item"]      { --callout-color: 251, 191,  36; --callout-icon: lucide-gem; }
+.callout[data-callout="t20-lore"]      { --callout-color: 107, 114, 128; --callout-icon: lucide-scroll-text; }
+
+
+/* ═══════════════════════════════════════════════
+   SISTEMA DE APOIO A RPG DE MESA — CSS EXPANDIDO
+   ═══════════════════════════════════════════════ */
+
+/* Callout de Ameaça / Monstro / NPC (Statblock) */
+.callout[data-callout="ameaca"],
+.callout[data-callout="t20-statblock"] {
+  --callout-color: 220, 38, 38;
+  --callout-icon: lucide-skull;
+  border-left: 4px solid var(--t20-vermelho);
+  background-color: rgba(239, 68, 68, 0.05);
+  border-radius: 8px;
+}
+
+/* Callout de Combate e Iniciativa */
+.callout[data-callout="combate"] {
+  --callout-color: 245, 158, 11;
+  --callout-icon: lucide-swords;
+  border-left: 4px solid var(--t20-laranja);
+  background-color: rgba(245, 158, 11, 0.05);
+  border-radius: 8px;
+}
+
+/* Callout de Sessão / Diário de Campanha */
+.callout[data-callout="sessao"] {
+  --callout-color: 16, 185, 129;
+  --callout-icon: lucide-book-open;
+  border-left: 4px solid var(--t20-verde);
+  background-color: rgba(16, 185, 129, 0.05);
+  border-radius: 8px;
+}
+
+/* Callout de Local / Masmorra */
+.callout[data-callout="local"] {
+  --callout-color: 14, 165, 233;
+  --callout-icon: lucide-map-pin;
+  border-left: 4px solid var(--t20-ciano);
+  background-color: rgba(14, 165, 233, 0.05);
+  border-radius: 8px;
+}
+
+/* Callout de Tesouro / Recompensa */
+.callout[data-callout="tesouro"] {
+  --callout-color: 234, 179, 8;
+  --callout-icon: lucide-coins;
+  border-left: 4px solid var(--t20-amarelo);
+  background-color: rgba(234, 179, 8, 0.05);
+  border-radius: 8px;
+}
+
+/* Estilo para Dados do Dice Roller */
+.dice-roller {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--t20-vermelho);
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 1px 6px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.dice-roller:hover {
+  background-color: rgba(239, 68, 68, 0.3);
+  transform: scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dice-roller {
+    transition: none;
+  }
+  .dice-roller:hover {
+    transform: none;
+  }
+}
+
+/* Tabelas Dataview Estilo DM Screen */
+.dataview.table-view-table {
+  font-size: 0.9em;
+  width: 100%;
+}
+.dataview.table-view-table thead th {
+  background-color: rgba(220, 38, 38, 0.08);
+  border-bottom: 2px solid var(--t20-vermelho);
+  font-weight: 700;
+}
+.dataview.table-view-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.dataview.table-view-table tbody td {
+  min-height: 2.25rem;
+  vertical-align: middle;
+}
+
+/* Painel do Escudo do Mestre: Cards Grid */
+.t20-dm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.t20-dm-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-top: 3px solid var(--t20-vermelho);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.t20-dm-card h3 {
+  margin-top: 0;
+  color: var(--t20-vermelho);
+}
+
+
+/* === PAPERDOLL DE EQUIPAMENTO (3 COLUNAS) === */
+.callout[data-callout="t20-paperdoll"] {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0.75rem 0;
+}
+
+.callout[data-callout="t20-paperdoll"] > .callout-title {
+  display: none;
+}
+
+.callout[data-callout="t20-paperdoll"] > .callout-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.75rem;
+  padding: 0;
+}
+
+.callout[data-callout="t20-slot-group"] {
+  --callout-color: 180, 142, 173;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-top: 3px solid rgb(var(--callout-color));
+  border-radius: 8px;
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+}
+
+.callout[data-callout="t20-slot-group"] .callout-icon {
+  display: none;
+}
+
+.callout[data-callout="t20-slot-group"] .callout-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.callout[data-callout="t20-slot-group"] ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.callout[data-callout="t20-slot-group"] li {
+  padding: 0.25rem 0;
+  border-bottom: 1px dashed var(--background-modifier-border);
+  font-size: 0.88rem;
+}
+
+.callout[data-callout="t20-slot-group"] li:last-child {
+  border-bottom: none;
+}

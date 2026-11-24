@@ -1,0 +1,28 @@
+---
+tipo: "poder"
+subtipo: "poder-classe"
+categoria: "classe"
+sistema: "tormenta20-jda"
+fonte: "Tormenta20 JdA"
+nome: "Mestre Cuca"
+resumo: "Todas as comidas que você cozinha têm seu bônus numérico aumentado em +1."
+ativacao: "passiva"
+natureza: "extraordinaria"
+subcategoria_tatica: "utilidade"
+area_efeito: "pessoal"
+escala_por_nivel: false
+escala_por_poderes_tormenta: false
+classe: "[[Inventor]]"
+requer_pericia:
+  - "Ofício (Culinária)"
+---
+# ⚡ Mestre Cuca
+
+> [!t20-stats]
+> - 🏷️ <span class="t20-roxo">Categoria:</span> Poder de Classe ([[Inventor]])
+> - 🔑 <span class="t20-amarelo">Pré-requisitos:</span> Treinado em Ofício (Culinária)
+> - 📜 <span class="t20-ciano">Fonte:</span> Tormenta20 JdA
+
+Todas as comidas que você cozinha têm seu bônus numérico aumentado em +1.
+
+---

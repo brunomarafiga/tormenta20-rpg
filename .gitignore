@@ -1,0 +1,11 @@
+# Obsidian workspace e caches de sessão
+.obsidian/workspace*
+.obsidian/cache/
+.trash/
+
+# Sistema e temporários
+*.tmp
+*.log
+Thumbs.db
+Desktop.ini
+.DS_Store
