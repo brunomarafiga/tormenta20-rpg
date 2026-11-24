@@ -1689,7 +1689,10 @@
 
   <div id="rollToast" class="roll-toast" style="display:none;" role="status" aria-live="polite">
     <div class="toast-title" id="toastTitle">Rolagem de D20</div>
-    <div class="toast-val" id="toastVal">18</div>
+    <div class="toast-val-row" style="display:flex; justify-content:space-between; align-items:baseline; gap:16px;">
+      <div class="toast-val" id="toastVal">18</div>
+      <div class="toast-dmg" id="toastDmg" style="display:none; font-family:var(--font-title); font-size:1.35rem; font-weight:800; color:var(--ruby-bright); text-shadow:0 0 10px rgba(239, 68, 68, 0.5); white-space:nowrap;"></div>
+    </div>
     <div class="toast-sub" id="toastSub">1d20 + 10</div>
   </div>
 
@@ -2198,34 +2201,165 @@
       showToast(`${name}`, total, `d20 (${d20}) ${sign} ${crit}`);
     }
 
+    function parseCritInfo(critStr) {
+      let threat = 20;
+      let mult = 2;
+      const isAuto = /automático/i.test(critStr || '');
+
+      if (critStr) {
+        const rangeMatch = critStr.match(/(\d+)\s*-\s*20/);
+        if (rangeMatch) {
+          threat = parseInt(rangeMatch[1], 10);
+        }
+        const multMatch = critStr.match(/x\s*(\d+)/i);
+        if (multMatch) {
+          mult = parseInt(multMatch[1], 10);
+        }
+      }
+      return { threat, mult, isAuto };
+    }
+
+    function parseAndRollDiceExpression(expr, multiplier = 1) {
+      if (!expr || typeof expr !== 'string') return { total: 0, breakdown: '0', diceRolls: [] };
+
+      let total = 0;
+      const breakdownParts = [];
+      const diceRolls = [];
+
+      const normalized = expr.replace(/-/g, '+ -');
+      const tokens = normalized.split('+').map(t => t.trim()).filter(Boolean);
+
+      tokens.forEach(tok => {
+        const diceMatch = tok.match(/^(-)?\s*(\d*)d(\d+)(.*)$/i);
+        if (diceMatch) {
+          const isNeg = diceMatch[1] === '-';
+          let numDice = parseInt(diceMatch[2] || '1', 10);
+          const dieSides = parseInt(diceMatch[3], 10);
+          const extraLabel = diceMatch[4].trim();
+
+          numDice = numDice * multiplier;
+
+          const rolls = [];
+          let subTotal = 0;
+          for (let i = 0; i < numDice; i++) {
+            const r = Math.floor(Math.random() * dieSides) + 1;
+            rolls.push(r);
+            subTotal += r;
+          }
+
+          if (isNeg) subTotal = -subTotal;
+          total += subTotal;
+          diceRolls.push(...rolls);
+
+          const rollsStr = rolls.length > 1 ? `[${rolls.join('+')}]=${subTotal}` : `[${rolls[0]}]`;
+          breakdownParts.push(`${numDice}d${dieSides}${extraLabel ? ' ' + extraLabel : ''}(${rollsStr})`);
+        } else {
+          const flatMatch = tok.match(/^(-)?\s*(\d+)(.*)$/);
+          if (flatMatch) {
+            const isNeg = flatMatch[1] === '-';
+            let val = parseInt(flatMatch[2], 10);
+            if (isNeg) val = -val;
+            const extraLabel = flatMatch[3].trim();
+            total += val;
+            breakdownParts.push(`${val >= 0 ? '+' : ''}${val}${extraLabel ? ' ' + extraLabel : ''}`);
+          }
+        }
+      });
+
+      return {
+        total: Math.max(0, total),
+        breakdown: breakdownParts.join(' ').replace(/\+\s*\+/g, '+').replace(/\+\s*-/g, '-').trim(),
+        diceRolls
+      };
+    }
+
     function rollAttack(arma, bonus, dano, crit) {
       playSound('dice');
-      if (bonus === 999 || crit.includes('Automático')) {
+      const { threat, mult, isAuto } = parseCritInfo(crit);
+
+      // Ataque com crítico automático garantido (ex: Execução de Thwor)
+      if (bonus === 999 || isAuto) {
         playSound('crit');
-        showToast(`Ataque com ${arma}`, "CRÍTICO GARANTIDO!", `Dano Crítico: ${dano} (Essência Pura)`);
         triggerBowState('crit');
+        const dmgRoll = parseAndRollDiceExpression(dano, mult);
+        showToast(
+          `⚔️ ${arma}`,
+          `🎯 ACERTO!`,
+          `Crítico Automático (${mult}x): ${dmgRoll.breakdown}`,
+          `💥 ${dmgRoll.total} Dano Crítico!`
+        );
         return;
       }
 
+      // Rola o dado de ataque: 1d20
       const d20 = Math.floor(Math.random() * 20) + 1;
-      const total = d20 + bonus;
-      const isCrit = d20 >= 19;
-      if (isCrit) {
+      const totalAtk = d20 + bonus;
+      const isNat20 = (d20 === 20);
+      const isNat1 = (d20 === 1);
+      const isThreat = (d20 >= threat);
+
+      if (isThreat) {
+        // Ameaça de Crítico! Rola o dano multiplicado pelo crítico (ex: x3)
         playSound('crit');
         triggerBowState('crit');
+        const critDmg = parseAndRollDiceExpression(dano, mult);
+        const normDmg = parseAndRollDiceExpression(dano, 1);
+        const critTitle = isNat20 ? "🌟 20 NATURAL! AMEAÇA CRÍTICA!" : `🔥 AMEAÇA DE CRÍTICO (${threat}+)!`;
+
+        showToast(
+          `${critTitle} — ${arma}`,
+          `🎯 Atk ${totalAtk}`,
+          `Atk: d20(${d20}) + ${bonus} = ${totalAtk} | Dano Crítico (${mult}x): ${critDmg.breakdown} (Se normal: ${normDmg.total})`,
+          `💥 ${critDmg.total} Dano!`
+        );
+      } else if (isNat1) {
+        playSound('click');
+        showToast(
+          `💀 1 NATURAL (FALHA CRÍTICA) — ${arma}`,
+          `🎯 Atk ${totalAtk}`,
+          `d20(1) + ${bonus} = ${totalAtk}. O ataque errou automaticamente!`,
+          `❌ 0 Dano`
+        );
+      } else {
+        // Acerto normal: Rola o dano da arma
+        const normDmg = parseAndRollDiceExpression(dano, 1);
+        showToast(
+          `⚔️ ${arma}`,
+          `🎯 Atk ${totalAtk}`,
+          `Atk: d20(${d20}) + ${bonus} = ${totalAtk} | Dano: ${normDmg.breakdown}`,
+          `💥 ${normDmg.total} Dano`
+        );
       }
-      showToast(`Ataque com ${arma}`, `${total}`, `d20 (${d20}) + ${bonus} | Dano: ${dano} ${isCrit ? '🔥 Ameaça de Crítico!' : ''}`);
+    }
+
+    function rollWeaponItem(nome, dano, crit) {
+      const c = characters[currentCharacterIndex] || {};
+      const isDist = /arco|besta|arremesso|funda|dardo/i.test(nome);
+      const bonus = isDist ? (c.pontaria || 10) : (c.luta || 3);
+      rollAttack(nome, bonus, dano, crit);
     }
 
     let toastTimer = null;
-    function showToast(title, val, sub = '') {
+    function showToast(title, val, sub = '', dmg = '') {
       const toast = document.getElementById('rollToast');
       document.getElementById('toastTitle').textContent = title;
       document.getElementById('toastVal').textContent = val;
       document.getElementById('toastSub').textContent = sub;
+
+      const toastDmg = document.getElementById('toastDmg');
+      if (toastDmg) {
+        if (dmg) {
+          toastDmg.style.display = 'block';
+          toastDmg.textContent = dmg;
+        } else {
+          toastDmg.style.display = 'none';
+          toastDmg.textContent = '';
+        }
+      }
+
       toast.style.display = 'flex';
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 3800);
+      toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 4500);
     }
 
     /* =========================================================
@@ -2981,7 +3115,7 @@
           `Subtipo: ${sub}`
         ], `
           <p><strong>Descrição:</strong> ${itemDesc}</p>
-          ${it.dano ? `<p style="margin-top:8px;"><strong>Dano:</strong> ${cleanText(it.dano)} | <strong>Crítico:</strong> ${cleanText(it.critico || 'x2')}</p>` : ''}
+          ${it.dano ? `<p style="margin-top:8px;"><strong>Dano:</strong> ${cleanText(it.dano)} | <strong>Crítico:</strong> ${cleanText(it.critico || 'x2')}</p><div style="margin-top:12px;"><button type="button" class="btn-roll-atk" onclick="rollWeaponItem('${itemName.replace(/'/g, "\\'")}', '${cleanText(it.dano)}', '${cleanText(it.critico || 'x2')}')">🎲 Rolar Ataque & Dano</button></div>` : ''}
           ${it.bonus_defesa ? `<p style="margin-top:8px;"><strong>Defesa:</strong> +${it.bonus_defesa}</p>` : ''}
           ${it.penalidade_armadura ? `<p style="margin-top:8px;"><strong>Penalidade:</strong> ${it.penalidade_armadura}</p>` : ''}
         `);
