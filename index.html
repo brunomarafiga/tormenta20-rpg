@@ -2088,12 +2088,17 @@
     function updateResourceUI() {
       const c = characters[currentCharacterIndex];
       if (!c) return;
-      document.getElementById('pvText').textContent = `${c.pv_atual} / ${c.pv_total}`;
-      const pvPct = Math.max(0, Math.min(100, (c.pv_atual / c.pv_total) * 100));
+
+      const pvTempStr = (c.pv_temp && c.pv_temp > 0) ? ` (+${c.pv_temp} Temp)` : '';
+      document.getElementById('pvText').textContent = `${c.pv_atual} / ${c.pv_total}${pvTempStr}`;
+      const maxPvCalc = c.pv_total + (c.pv_temp || 0);
+      const pvPct = Math.max(0, Math.min(100, (c.pv_atual / (maxPvCalc || 1)) * 100));
       document.getElementById('pvBar').style.width = pvPct + '%';
 
-      document.getElementById('pmText').textContent = `${c.pm_atual} / ${c.pm_total}`;
-      const pmPct = Math.max(0, Math.min(100, (c.pm_atual / c.pm_total) * 100));
+      const pmTempStr = (c.pm_temp && c.pm_temp > 0) ? ` (+${c.pm_temp} Temp)` : '';
+      document.getElementById('pmText').textContent = `${c.pm_atual} / ${c.pm_total}${pmTempStr}`;
+      const maxPmCalc = c.pm_total + (c.pm_temp || 0);
+      const pmPct = Math.max(0, Math.min(100, (c.pm_atual / (maxPmCalc || 1)) * 100));
       document.getElementById('pmBar').style.width = pmPct + '%';
     }
 
@@ -2103,9 +2108,11 @@
       if (!c) return;
 
       if (type === 'pv') {
-        c.pv_atual = Math.max(0, Math.min(c.pv_total, c.pv_atual + delta));
+        const maxLimit = c.pv_total + (c.pv_temp || 0);
+        c.pv_atual = Math.max(0, Math.min(maxLimit, c.pv_atual + delta));
       } else if (type === 'pm') {
-        c.pm_atual = Math.max(0, Math.min(c.pm_total, c.pm_atual + delta));
+        const maxLimit = c.pm_total + (c.pm_temp || 0);
+        c.pm_atual = Math.max(0, Math.min(maxLimit, c.pm_atual + delta));
       }
       updateResourceUI();
     }
@@ -2114,13 +2121,15 @@
       playSound('spell');
       const c = characters[currentCharacterIndex];
       if (!c) return;
+      c.pv_temp = 0;
+      c.pm_temp = 0;
       c.pv_atual = c.pv_total;
       c.pm_atual = c.pm_total;
       bowState = 'normal';
       updateBowStateUI();
       updateResourceUI();
       renderCharacter();
-      showToast("Descanso Concluído", "PV e PM Restaurados!", "Condições limpas.");
+      showToast("Descanso Concluído", "PV e PM Restaurados!", "Condições e bônus temporários limpos.");
     }
 
     document.getElementById('characterSelect').addEventListener('change', (e) => {
@@ -2154,7 +2163,44 @@
 
     function executeTacticalAction(name, cost) {
       const c = characters[currentCharacterIndex];
-      if (cost.includes('PM')) {
+
+      // Foco em Perícia (Enganação) - Destino
+      if (name.includes('Foco em Perícia') || name.includes('Enganação')) {
+        if (c.pm_atual < 1) {
+          showToast("Mana Insuficiente!", "Necessário 1 PM para usar Foco em Perícia.");
+          return;
+        }
+        playSound('dice');
+        c.pm_atual -= 1;
+        updateResourceUI();
+        const d20 = Math.floor(Math.random() * 20) + 1;
+        const total = d20 + 13;
+        showToast(
+          "🎯 Foco em Perícia (Enganação)",
+          `Resultado: ${total}`,
+          `Re-rolagem aceita: d20(${d20}) + 13 = ${total} | -1 PM (PM Restante: ${c.pm_atual})`
+        );
+        return;
+      }
+
+      // Missa: Elevação do Espírito (Cajado do Pastor + Incenso)
+      if (name.includes('Elevação do Espírito') || name.includes('Missa')) {
+        playSound('spell');
+        // Base Missa: +5 PM | Cajado do Pastor: +5 PV, +5 PM | Incenso Litúrgico: +2 PM -> Total: +12 PM Temp e +5 PV Temp
+        c.pm_temp = (c.pm_temp || 0) + 12;
+        c.pv_temp = (c.pv_temp || 0) + 5;
+        c.pm_atual += 12;
+        c.pv_atual += 5;
+        updateResourceUI();
+        showToast(
+          "🕯️ Missa: Elevação do Espírito",
+          "+12 PM & +5 PV Temporários!",
+          "Celebrada com Cajado do Pastor (+5 PV, +5 PM) e Incenso (+2 PM) somados aos +5 PM da Missa!"
+        );
+        return;
+      }
+
+      if (cost && cost.includes('PM')) {
         const pmNum = parseInt(cost, 10) || 1;
         if (c.pm_atual < pmNum) {
           showToast("Mana Insuficiente!", `Necessário ${pmNum} PM.`);
@@ -3037,7 +3083,7 @@
         const nat1Tag = isNat1 ? " 💀 1 NATURAL! DESASTRE!" : "";
         showToast(
           `❌ Falha na Usurpação!${nat1Tag}`,
-          `🎲 d20 (${d20}) + 13 = ${totalCheck} vs CD ${cd}. O poder divino escapou! A magia falhou, mas ${totalCost} PM foram gastos. (PM Restante: ${c.pm_atual})`
+          `🎲 d20 (${d20}) + 13 = ${totalCheck} vs CD ${cd}. Magia falhou, ${totalCost} PM gastos. (Dica: Use Foco em Perícia por 1 PM para re-rolar!)`
         );
       }
     }

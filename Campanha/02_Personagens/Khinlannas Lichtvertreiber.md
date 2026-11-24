@@ -41,7 +41,8 @@ slot_extra: "[[Fitilho Consagrado]]"
 slot_estetico: "Vestuário Social / Hábito de Viajante"
 slot_mochila: "[[Mochila de Aventureiro]]"
 mochila:
-  - "[[Cajado]]"
+  - "[[Cajado do Pastor]]"
+  - "[[Incenso Litúrgico]]"
   - "[[Bálsamo Restaurador]]"
   - "[[Ração de viagem]]"
   - "20x Flechas Incendiárias"
@@ -56,7 +57,7 @@ habilidades:
 poderes:
   - "[[Lembranças Graduais]]"
   - "[[Impostor]]"
-  - "[[Sortudo]]"
+  - "[[Foco em Perícia (Enganação)]]"
   - "[[Missa Elevação do Espírito]]"
   - "[[Bênção de Batalha]]"
 magias:
@@ -145,13 +146,13 @@ SORT tipo ASC, file.name ASC
 | **[[Lembranças Graduais]]** | Origem (Amnésico) | Critério do mestre | 0 PM | Teste de Sabedoria (CD 10) para reconhecer pessoas, lugares ou fatos do passado |
 | **[[Sangue Élfico]]** | Raça (Meio-Elfo) | Passiva | 0 PM | Visão na penumbra, +1 PM a cada nível ímpar (1º e 3º) e considerado elfo |
 | **[[Entre Dois Mundos]]** | Raça (Meio-Elfo) | Passiva | 0 PM | +1 em perícias baseadas em Carisma |
-| **[[Sortudo]]** | Poder Geral | Reação | 3 PM | Rola novamente um teste recém-realizado |
+| **[[Foco em Perícia (Enganação)]]** | Destino | Livre | 1 PM | Gasta 1 PM para rolar novamente um teste recém-realizado de Enganação (+13), aceitando a nova rolagem |
 | **[[Inimigo dos Deuses]]** | Usurpador 1 | Passiva | 0 PM | Não segue deuses; imune a restrições dogmáticas do Panteão |
 | **[[Usurpar]]** | Usurpador 1 | Ação Padrão | Variável | Lança qualquer magia divina com teste de [[Enganação]] (CD 15 + PM da magia) |
 | **[[Canalização Falsa]]** | Usurpador 2 | Ação Padrão | 1 PM | Canaliza energia positiva (cura) ou negativa (dano) em alcance curto |
 | **Poder de Clérigo** | Usurpador 2 | Passiva | 0 PM | Usa Carisma no lugar de Sabedoria em poderes de clérigo |
 | **[[Discrição Divina]]** | Usurpador 3 | Passiva | 0 PM | +1 em Furtividade e em todos os testes de resistência (+1 a cada 6 níveis) |
-| **[[Missa Elevação do Espírito]]** | Poder de Clérigo | Descanso | 0 PM | Oração matinal concede +1 PM temporário a todos os participantes |
+| **[[Missa Elevação do Espírito]]** | Poder de Clérigo | Descanso | T$ 25 + Incenso | Celebração com Cajado do Pastor (+5 PV, +5 PM) e Incenso (+2 PM) somados à base da missa (+5 PM), concedendo no total **+12 PM temporários** e **+5 PV temporários** a todos os participantes até o fim do dia |
 | **[[Bênção de Batalha]]** | Poder de Clérigo | Movimento / Padrão | 1 PM | *Bênção* afeta a si mesmo e pode ser lançada como ação de movimento na 1ª rodada |
 
 ---
