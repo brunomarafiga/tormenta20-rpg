@@ -720,23 +720,24 @@
     .backpack-capacity-bar {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
       background: #12131d;
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-subtle);
     }
     .capacity-header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 0.78rem;
       font-weight: 700;
       color: #fff;
     }
     .capacity-track {
-      height: 6px;
+      height: 7px;
       background: #1e202e;
-      border-radius: 3px;
+      border-radius: 4px;
       overflow: hidden;
     }
     .capacity-fill {
@@ -745,21 +746,90 @@
       transition: width 0.3s;
     }
 
+    /* Barra Segmentada de Espaços de Carga */
+    .diablo-space-segments {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    .space-segment-block {
+      flex: 1;
+      min-width: 26px;
+      height: 22px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #11131e;
+      color: #94a3b8;
+    }
+    .space-segment-block:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .space-segment-block.occupied {
+      color: #fff;
+    }
+    .space-segment-block.occupied.comum {
+      background: #1e2438;
+      border-color: #3b4259;
+    }
+    .space-segment-block.occupied.superior {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #7dd3fc;
+    }
+    .space-segment-block.occupied.alquimia {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+      color: #6ee7b7;
+    }
+    .space-segment-block.occupied.sagrado {
+      background: rgba(245, 158, 11, 0.25);
+      border-color: #f59e0b;
+      color: #fcd34d;
+    }
+    .space-segment-block.occupied.artefato {
+      background: rgba(220, 38, 38, 0.25);
+      border-color: #dc2626;
+      color: #fca5a5;
+    }
+    .space-segment-block.free {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      color: #64748b;
+    }
+
     /* Grid Quadriculado Estilo Diablo */
     .backpack-grid-cells {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 10px;
+    }
+    @media (max-width: 600px) {
+      .backpack-grid-cells {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
     .grid-cell {
-      aspect-ratio: 1;
+      min-height: 94px;
       background: #11131e;
       border: 1px solid #23263a;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       position: relative;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      padding: 7px;
       cursor: pointer;
       transition: all 0.2s;
       overflow: hidden;
@@ -767,28 +837,202 @@
     .grid-cell:hover {
       border-color: var(--ruby-primary);
       background: #1a1d2e;
-      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
     .grid-cell.occupied {
       background: linear-gradient(135deg, #151827 0%, #1c1318 100%);
       border-color: #3b1b22;
     }
-    .grid-cell.occupied.artefato { border-color: #dc2626; box-shadow: inset 0 0 8px rgba(220, 38, 38, 0.4); }
+    .grid-cell.occupied.artefato { border-color: #dc2626; box-shadow: inset 0 0 10px rgba(220, 38, 38, 0.35); }
     .grid-cell.occupied.superior { border-color: #38bdf8; }
     .grid-cell.occupied.alquimia { border-color: #10b981; }
-    .grid-cell .cell-icon {
-      font-size: 1.6rem;
+    .grid-cell.occupied.sagrado { border-color: #f59e0b; }
+    .grid-cell.occupied.large-item {
+      grid-column: span 2;
+      background: linear-gradient(135deg, #1a1528 0%, #2b1118 100%);
     }
-    .grid-cell .cell-badge-qty {
-      position: absolute;
-      bottom: 2px;
-      right: 4px;
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.75);
+
+    /* Topo da Célula */
+    .cell-top-meta {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.62rem;
+      margin-bottom: 2px;
+    }
+    .cell-slot-num {
+      color: #94a3b8;
+      font-weight: 700;
+    }
+    .cell-badge-space {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
       padding: 1px 4px;
       border-radius: 3px;
+      font-weight: 800;
+      font-size: 0.6rem;
+    }
+    .cell-badge-space.large {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: #f59e0b;
+      color: #fcd34d;
+    }
+
+    /* Centro da Célula */
+    .cell-main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      width: 100%;
+      text-align: center;
+      margin: auto 0;
+    }
+    .cell-main-content .cell-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .cell-main-content .cell-item-name {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .grid-cell.large-item .cell-main-content .cell-item-name {
+      font-size: 0.84rem;
+      white-space: normal;
+    }
+
+    /* Rodapé da Célula */
+    .cell-bottom-meta {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 3px;
+      margin-top: 2px;
+    }
+    .cell-badge-qty {
+      font-weight: 800;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* Célula Livre */
+    .grid-cell.free-slot {
+      background: rgba(17, 19, 30, 0.4);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+    }
+    .grid-cell.free-slot:hover {
+      border-color: var(--emerald);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    .free-slot-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: #64748b;
+      margin: auto 0;
+    }
+    .free-slot-center .free-icon {
+      font-size: 1.4rem;
+      opacity: 0.6;
+    }
+    .free-slot-center .free-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .free-slot-sub {
+      font-size: 0.62rem;
+      color: #475569;
+    }
+
+    /* Resumo / Tabela de Espaços */
+    .backpack-spaces-summary {
+      background: #0b0c14;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-top: 8px;
+    }
+    .spaces-ledger-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 4px;
+    }
+    .spaces-ledger-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ledger-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      padding: 3px 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .ledger-item-row:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+    .ledger-item-row.free {
+      color: #64748b;
+      font-style: italic;
+      background: transparent;
+    }
+    .ledger-item-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .ledger-slot-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #f87171;
+      background: #2b1114;
+      padding: 1px 5px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .ledger-space-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #94a3b8;
+      flex-shrink: 0;
+    }
+    .ledger-space-badge.large {
+      color: #fcd34d;
+      font-weight: 800;
     }
 
     /* =========================================================
@@ -1625,19 +1869,32 @@
                 <div class="backpack-capacity-bar">
                   <div class="capacity-header">
                     <span>⚖️ Capacidade de Carga (T20 JdA)</span>
-                    <span id="cargaText">7 / 10 Espaços (Força 0)</span>
+                    <span id="cargaText">9 / 10 Espaços (Força 0)</span>
                   </div>
                   <div class="capacity-track">
-                    <div class="capacity-fill" id="cargaFill" style="width: 70%;"></div>
+                    <div class="capacity-fill" id="cargaFill" style="width: 90%;"></div>
+                  </div>
+
+                  <!-- Barra Segmentada de Espaços de Carga -->
+                  <div class="diablo-space-segments" id="diabloSpaceSegments" title="10 Espaços de Carga de Tormenta 20 (baseados em Força 0)">
+                    <!-- Povoado dinamicamente: 10 blocos de espaço -->
                   </div>
                 </div>
 
-                <div style="font-family:var(--font-title); font-size:0.82rem; color:#f87171; text-transform:uppercase; font-weight:700;">
-                  📦 Mochila de Aventureiro (Grid de Células)
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #231215; padding-bottom:4px;">
+                  <div style="font-family:var(--font-title); font-size:0.82rem; color:#f87171; text-transform:uppercase; font-weight:700; display:flex; align-items:center; gap:6px;">
+                    <span>📦</span> Espaços da Mochila (Grid Diablo)
+                  </div>
+                  <span id="cargaStatusBadge" style="font-size:0.72rem; color:var(--emerald); font-weight:700;">✓ Carga Leve (1 espaço livre)</span>
                 </div>
 
                 <div class="backpack-grid-cells" id="diabloBackpackGrid">
                   <!-- Povoado dinamicamente com as células de Diablo -->
+                </div>
+
+                <!-- Detalhamento dos Espaços de Carga da Mochila -->
+                <div class="backpack-spaces-summary" id="backpackSpacesSummary">
+                  <!-- Povoado dinamicamente -->
                 </div>
               </div>
 
@@ -2096,48 +2353,193 @@
           openModal(sl.nome, [sl.slot, sl.raridade ? sl.raridade.toUpperCase() : 'COMUM', sl.item_vestido ? 'Item Vestido (JdA)' : 'Item Geral'], `
             <p><strong>Descrição:</strong> ${sl.desc || 'Equipamento ajustado ao herói.'}</p>
             ${sl.stats ? `<p style="margin-top:8px;"><strong>Estatísticas / Efeito:</strong> ${sl.stats}</p>` : ''}
-            ${sl.item_vestido ? `<p style="margin-top:8px; color:var(--emerald);">✓ Ocupa 1 dos 4 slots de itens vestidos de Tormenta 20.</p>` : ''}
+            ${sl.item_vestido ? `<p style="margin-top:8px; color:var(--emerald);">✓ Ocupa 1 dos 4 slots corporais de itens vestidos de Tormenta 20.</p>` : ''}
           `);
         };
 
         paperdollGrid.appendChild(slotEl);
       }
 
-      // Mochila Quadriculada (Diablo Cells)
-      const backpackGrid = document.getElementById('diabloBackpackGrid');
-      backpackGrid.innerHTML = '';
+      // Capacidade de Carga de T20 (10 + For x 3)
+      const forMod = c.for ?? 0;
+      const espacosMax = c.espacos_max || (10 + Math.max(0, forMod * 3));
       const items = c.mochila_diablo || [];
-      const totalCells = 16; // 4x4 Grid Diablo
 
-      for (let i = 0; i < totalCells; i++) {
-        const cell = document.createElement('div');
-        const it = items[i];
-
-        if (it) {
-          cell.className = `grid-cell occupied ${it.raridade || 'comum'}`;
-          cell.innerHTML = `
-            <span class="cell-icon">${it.icone || '📦'}</span>
-            ${it.qtd > 1 ? `<span class="cell-badge-qty">${it.qtd}</span>` : ''}
-          `;
-          cell.title = it.nome;
-          cell.onclick = () => openBackpackItemModal(it);
-        } else {
-          cell.className = 'grid-cell';
-          cell.innerHTML = `<span style="font-size:0.65rem; color:#272a3d;">${i + 1}</span>`;
-        }
-
-        backpackGrid.appendChild(cell);
-      }
+      // Calcula espaços totais ocupados
+      let espacosOcupados = 0;
+      items.forEach(it => {
+        espacosOcupados += (it.espacos || 1);
+      });
 
       // Atualiza barra de capacidade
-      const espacosMax = c.espacos_max || 10;
-      const espacosOcupados = c.espacos_ocupados || items.length;
-      document.getElementById('cargaText').textContent = `${espacosOcupados} / ${espacosMax} Espaços (Força 0)`;
+      const cargaText = document.getElementById('cargaText');
+      if (cargaText) {
+        cargaText.textContent = `${espacosOcupados} / ${espacosMax} Espaços (Força ${forMod >= 0 ? `+${forMod}` : forMod})`;
+      }
+      const cargaFill = document.getElementById('cargaFill');
       const pct = Math.min(100, (espacosOcupados / espacosMax) * 100);
-      document.getElementById('cargaFill').style.width = pct + '%';
+      if (cargaFill) {
+        cargaFill.style.width = pct + '%';
+        if (espacosOcupados > espacosMax) {
+          cargaFill.style.background = 'linear-gradient(90deg, #ef4444, #b91c1c)';
+        } else {
+          cargaFill.style.background = 'var(--ruby-gradient)';
+        }
+      }
+
+      const statusBadge = document.getElementById('cargaStatusBadge');
+      if (statusBadge) {
+        if (espacosOcupados > espacosMax) {
+          statusBadge.textContent = `⚠️ SOBRECARREGADO (-3m, -5 Armadura)`;
+          statusBadge.style.color = '#f87171';
+        } else {
+          const livres = espacosMax - espacosOcupados;
+          statusBadge.textContent = `✓ Carga Leve (${livres} espaço${livres === 1 ? '' : 's'} livre${livres === 1 ? '' : 's'})`;
+          statusBadge.style.color = 'var(--emerald)';
+        }
+      }
+
+      // 1. Barra Segmentada de Espaços (1 a 10)
+      const segmentsContainer = document.getElementById('diabloSpaceSegments');
+      if (segmentsContainer) {
+        segmentsContainer.innerHTML = '';
+        let segSlotCounter = 1;
+        items.forEach(it => {
+          const esp = it.espacos || 1;
+          for (let s = 0; s < esp; s++) {
+            const block = document.createElement('div');
+            const rarClass = it.raridade || 'comum';
+            block.className = `space-segment-block occupied ${rarClass}`;
+            block.textContent = `${it.icone || '📦'} ${segSlotCounter}`;
+            block.title = `Espaço #${segSlotCounter}: ${it.nome} (${esp} espaço${esp > 1 ? 's' : ''})`;
+            block.onclick = () => openBackpackItemModal(it);
+            segmentsContainer.appendChild(block);
+            segSlotCounter++;
+          }
+        });
+        // Slots livres até espacosMax
+        while (segSlotCounter <= espacosMax) {
+          const freeBlock = document.createElement('div');
+          freeBlock.className = 'space-segment-block free';
+          freeBlock.textContent = `⬚ ${segSlotCounter}`;
+          freeBlock.title = `Espaço #${segSlotCounter}: Livre`;
+          segmentsContainer.appendChild(freeBlock);
+          segSlotCounter++;
+        }
+      }
+
+      // 2. Mochila Quadriculada (Diablo Grid Cells)
+      const backpackGrid = document.getElementById('diabloBackpackGrid');
+      backpackGrid.innerHTML = '';
+
+      let slotTrack = 1;
+      items.forEach(it => {
+        const esp = it.espacos || 1;
+        const cell = document.createElement('div');
+        const isLarge = esp > 1;
+        const startSlot = slotTrack;
+        const endSlot = slotTrack + esp - 1;
+        slotTrack += esp;
+
+        const rarClass = it.raridade || 'comum';
+        cell.className = `grid-cell occupied ${rarClass} ${isLarge ? 'large-item' : ''}`;
+        
+        cell.innerHTML = `
+          <div class="cell-top-meta">
+            <span class="cell-slot-num">Espaço #${startSlot}${isLarge ? `-${endSlot}` : ''}</span>
+            <span class="cell-badge-space ${isLarge ? 'large' : ''}">${esp} ${esp > 1 ? 'Espaços' : 'Espaço'}</span>
+          </div>
+          <div class="cell-main-content">
+            <span class="cell-icon">${it.icone || '📦'}</span>
+            <span class="cell-item-name" title="${it.nome}">${it.nome}</span>
+          </div>
+          <div class="cell-bottom-meta">
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:85px;">${it.tipo || 'Item'}</span>
+            ${it.qtd > 1 ? `<span class="cell-badge-qty">x${it.qtd}</span>` : '<span style="color:#64748b;">1 un</span>'}
+          </div>
+        `;
+
+        cell.onclick = () => openBackpackItemModal(it);
+        backpackGrid.appendChild(cell);
+      });
+
+      // Células Livres no Grid
+      while (slotTrack <= espacosMax) {
+        const freeCell = document.createElement('div');
+        freeCell.className = 'grid-cell free-slot';
+        const freeNum = slotTrack;
+        slotTrack++;
+
+        freeCell.innerHTML = `
+          <div class="cell-top-meta">
+            <span class="cell-slot-num">Espaço #${freeNum}</span>
+            <span class="cell-badge-space" style="background:transparent; border-color:#334155; color:#64748b;">Livre</span>
+          </div>
+          <div class="free-slot-center">
+            <span class="free-icon">⬚</span>
+            <span class="free-label">Espaço Livre</span>
+            <span class="free-slot-sub">Capacidade de Carga</span>
+          </div>
+          <div class="cell-bottom-meta" style="justify-content:center;">
+            <span style="color:#475569;">1 Espaço Disponível</span>
+          </div>
+        `;
+
+        backpackGrid.appendChild(freeCell);
+      }
+
+      // 3. Tabela Resumo dos Espaços da Mochila
+      const summaryContainer = document.getElementById('backpackSpacesSummary');
+      if (summaryContainer) {
+        let ledgerHtml = `
+          <div class="spaces-ledger-header">
+            <span>📋 Detalhamento de Espaços de Carga</span>
+            <span style="color:#f87171; font-weight:800;">${espacosOcupados} / ${espacosMax} Espaços</span>
+          </div>
+          <div class="spaces-ledger-list">
+        `;
+
+        let lSlot = 1;
+        items.forEach(it => {
+          const esp = it.espacos || 1;
+          const isLarge = esp > 1;
+          const sSlot = lSlot;
+          const eSlot = lSlot + esp - 1;
+          lSlot += esp;
+
+          ledgerHtml += `
+            <div class="ledger-item-row" onclick="openBackpackItemModal(window.T20_DATA.characters[currentCharacterIndex].mochila_diablo.find(x => x.id === '${it.id}'))">
+              <div class="ledger-item-left">
+                <span class="ledger-slot-badge">#${sSlot}${isLarge ? `-${eSlot}` : ''}</span>
+                <span>${it.icone || '📦'} <strong>${it.nome}</strong></span>
+              </div>
+              <span class="ledger-space-badge ${isLarge ? 'large' : ''}">
+                ${esp} ${esp > 1 ? 'Espaços (Item Grande)' : 'Espaço'} ${it.qtd > 1 ? `(x${it.qtd})` : ''}
+              </span>
+            </div>
+          `;
+        });
+
+        while (lSlot <= espacosMax) {
+          ledgerHtml += `
+            <div class="ledger-item-row free">
+              <div class="ledger-item-left">
+                <span class="ledger-slot-badge" style="background:#1e202e; color:#64748b;">#${lSlot}</span>
+                <span>⬚ <em>Espaço Livre</em></span>
+              </div>
+              <span class="ledger-space-badge" style="color:#64748b;">1 Espaço Livre</span>
+            </div>
+          `;
+          lSlot++;
+        }
+
+        ledgerHtml += `</div>`;
+        summaryContainer.innerHTML = ledgerHtml;
+      }
     }
 
     function openBackpackItemModal(it) {
+      if (!it) return;
       let actionButtons = '';
       if (it.consumivel && it.id === 'balsamo') {
         actionButtons = `
@@ -2147,13 +2549,42 @@
             </button>
           </div>
         `;
+      } else if (it.id === 'luz') {
+        actionButtons = `
+          <div style="margin-top:16px;">
+            <button class="btn-roll-atk" style="background:linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color:#7dd3fc;" onclick="useFrascoLuz()">
+              💡 Arremessar / Ativar Frasco de Luz
+            </button>
+          </div>
+        `;
+      } else if (it.id === 'cajado_pastor') {
+        actionButtons = `
+          <div style="margin-top:16px;">
+            <button class="btn-roll-atk" style="background:linear-gradient(135deg, #f59e0b 0%, #b45309 100%); border-color:#fcd34d;" onclick="executeTacticalAction('Missa: Elevação do Espírito', 'T$ 25 + Incenso'); closeModal();">
+              🕯️ Celebrar Missa com o Cajado (+12 PM, +5 PV)
+            </button>
+          </div>
+        `;
       }
 
-      openModal(it.nome, [it.tipo, `${it.espacos} Espaço(s)`, it.raridade ? it.raridade.toUpperCase() : 'COMUM'], `
-        <p><strong>Descrição:</strong> ${it.desc || 'Item mantido na mochila de aventureiro.'}</p>
-        <p style="margin-top:8px;"><strong>Carga / Volume:</strong> Ocupa ${it.espacos} espaço(s) de carga.</p>
-        ${actionButtons}
+      openModal(`${it.icone || '📦'} ${it.nome}`, [it.tipo, `${it.espacos} Espaço(s) de Carga`, it.raridade ? it.raridade.toUpperCase() : 'COMUM'], `
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="background:#090a10; border:1px solid var(--border-subtle); padding:12px; border-radius:var(--radius-sm);">
+            <p><strong>Descrição:</strong> ${it.desc || 'Item mantido na mochila de aventureiro.'}</p>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); padding:8px 12px; border-radius:var(--radius-sm); font-size:0.85rem;">
+            <span><strong>Carga & Volume:</strong> Ocupa <strong>${it.espacos}</strong> espaço(s) de carga (T20 JdA).</span>
+            ${it.qtd > 1 ? `<span><strong>Quantidade:</strong> ${it.qtd} un</span>` : ''}
+          </div>
+          ${actionButtons}
+        </div>
       `);
+    }
+
+    function useFrascoLuz() {
+      showToast("Frasco de Luz Ativado", "Área Iluminada!", "Uma substância fosforescente ilumina uma esfera de 9m de raio por uma cena inteira.");
+      playSound('spell');
+      closeModal();
     }
 
     function useBalsamo() {
