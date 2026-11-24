@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="dark">
-  <title>Tormenta 20 — Compêndio de Arton & Ficha de Khinlannas</title>
+  <title>Tormenta 20 — Crônicas de Arton & Ficha de Khinlannas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,34 +17,32 @@
       color-scheme: dark;
       
       /* Fundos Preto Obsidiana Profundo */
-      --bg-base: #070709;
-      --bg-surface: #0f1016;
-      --bg-card: #14151f;
-      --bg-card-hover: #1c1e2d;
-      --bg-active: #25283b;
+      --bg-base: #060709;
+      --bg-surface: #0c0d14;
+      --bg-card: #12141f;
+      --bg-card-hover: #1a1c2c;
+      --bg-active: #23263b;
       
       /* Vermelho Carmesim / Rubro Khinlannas */
       --ruby-primary: #ef4444;
       --ruby-bright: #f87171;
       --ruby-dark: #991b1b;
       --ruby-deep: #450a0a;
-      --ruby-glow: 0 0 16px rgba(239, 68, 68, 0.4);
+      --ruby-glow: 0 0 16px rgba(239, 68, 68, 0.45);
       --ruby-border: #7f1d1d;
       --ruby-gradient: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
       
       /* Cores Secundárias Canônicas */
       --mana-cyan: #38bdf8;
       --mana-dark: #0369a1;
-      --mana-glow: 0 0 14px rgba(56, 189, 248, 0.35);
       --gold-accent: #f59e0b;
-      --gold-dark: #b45309;
       --emerald: #10b981;
       --purple-usurp: #a855f7;
       
       /* Textos e Linhas */
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --border-subtle: #242636;
+      --border-subtle: #222538;
       --border-accent: #3f1519;
       
       /* Fontes e Raios */
@@ -91,7 +89,7 @@
        HEADER & NAVIGATION
        ========================================================= */
     header.rpg-header {
-      background: linear-gradient(180deg, rgba(15, 16, 22, 0.98) 0%, rgba(7, 7, 9, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(12, 13, 20, 0.98) 0%, rgba(6, 7, 9, 0.95) 100%);
       border-bottom: 2px solid var(--ruby-border);
       position: sticky;
       top: 0;
@@ -101,7 +99,7 @@
     }
 
     .header-top {
-      max-width: 1350px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 12px 20px;
       display: flex;
@@ -170,7 +168,7 @@
 
     /* Abas Consolidadas */
     .tablist-wrapper {
-      max-width: 1350px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 0 20px 8px 20px;
       overflow-x: auto;
@@ -210,7 +208,7 @@
        MAIN CONTAINER & PANELS
        ========================================================= */
     main.rpg-main {
-      max-width: 1350px;
+      max-width: 1400px;
       width: 100%;
       margin: 0 auto;
       padding: 24px 20px 80px 20px;
@@ -240,7 +238,7 @@
       align-items: start;
     }
 
-    @media (max-width: 960px) {
+    @media (max-width: 1024px) {
       .sheet-grid { grid-template-columns: 1fr; }
     }
 
@@ -329,7 +327,7 @@
     /* Barras de Recursos PV e PM */
     .resource-box {
       margin-top: 14px;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       padding: 12px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-subtle);
@@ -343,11 +341,11 @@
     }
     .bar-track {
       height: 10px;
-      background: #1a1a24;
+      background: #161724;
       border-radius: 5px;
       overflow: hidden;
       margin-bottom: 8px;
-      border: 1px solid #2d2d3f;
+      border: 1px solid #282a3d;
     }
     .bar-fill {
       height: 100%;
@@ -366,7 +364,7 @@
       gap: 6px;
     }
     .btn-sm {
-      background: #1e202e;
+      background: #1c1e2d;
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
       padding: 4px 8px;
@@ -381,7 +379,7 @@
     .btn-sm:hover {
       border-color: var(--ruby-primary);
       color: #fff;
-      background: #2a2c3f;
+      background: #282b40;
     }
 
     /* 6 Atributos */
@@ -392,7 +390,7 @@
       margin-top: 14px;
     }
     .attr-badge {
-      background: #11121c;
+      background: #0f1019;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
       padding: 8px 4px;
@@ -480,6 +478,8 @@
       border-bottom: 1px solid var(--border-accent);
       padding-bottom: 10px;
       margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
     .section-header h3 {
       font-family: var(--font-title);
@@ -498,7 +498,7 @@
       gap: 10px;
     }
     .attack-card {
-      background: #11121a;
+      background: #0f1019;
       border: 1px solid var(--border-subtle);
       border-left: 4px solid var(--ruby-primary);
       border-radius: var(--radius-sm);
@@ -510,7 +510,7 @@
       transition: all 0.2s;
     }
     .attack-card:hover {
-      background: #1a1c29;
+      background: #181928;
       border-color: var(--ruby-primary);
       transform: translateX(2px);
     }
@@ -564,7 +564,7 @@
 
     /* Arco Inteligente (A Obra-Prima de Elarion) */
     .bow-status-card {
-      background: linear-gradient(135deg, rgba(69, 10, 10, 0.4) 0%, rgba(20, 21, 31, 0.8) 100%);
+      background: linear-gradient(135deg, rgba(69, 10, 10, 0.4) 0%, rgba(18, 20, 31, 0.8) 100%);
       border: 1px solid var(--ruby-border);
       border-radius: var(--radius-md);
       padding: 14px 16px;
@@ -609,14 +609,224 @@
       color: #fca5a5;
     }
 
-    /* Tabela de Perícias Reais */
-    .skills-table {
+    /* =========================================================
+       DIABLO-STYLE INVENTORY & PAPERDOLL
+       ========================================================= */
+    .diablo-inventory-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .diablo-inventory-container { grid-template-columns: 1fr; }
+    }
+
+    /* Paperdoll Anatômico */
+    .diablo-paperdoll {
+      background: #090a12;
+      border: 1px solid var(--ruby-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+    }
+    .paperdoll-slots-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .diablo-slot {
+      background: #11131e;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .diablo-slot:hover {
+      border-color: var(--ruby-primary);
+      background: #191c2c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+    }
+    .diablo-slot.equipped {
+      border-left: 3px solid var(--ruby-primary);
+    }
+    .diablo-slot.artefato {
+      border-color: #dc2626;
+      box-shadow: inset 0 0 10px rgba(220, 38, 38, 0.3);
+    }
+    .diablo-slot.superior {
+      border-color: #38bdf8;
+    }
+    .diablo-slot.sagrado {
+      border-color: #f59e0b;
+    }
+    .diablo-slot .slot-icon {
+      font-size: 1.5rem;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #181926;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+    .diablo-slot-meta {
+      flex: 1;
+      overflow: hidden;
+    }
+    .diablo-slot-meta .slot-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #f87171;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .diablo-slot-meta .item-name {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .diablo-slot-meta .item-stat {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Mochila Quadriculada (Grid Cells) */
+    .diablo-backpack {
+      background: #090a12;
+      border: 1px solid var(--ruby-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+    }
+    .backpack-capacity-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: #12131d;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+    .capacity-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .capacity-track {
+      height: 6px;
+      background: #1e202e;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .capacity-fill {
+      height: 100%;
+      background: var(--ruby-gradient);
+      transition: width 0.3s;
+    }
+
+    /* Grid Quadriculado Estilo Diablo */
+    .backpack-grid-cells {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
     }
-    .skill-card {
-      background: #11121c;
+    .grid-cell {
+      aspect-ratio: 1;
+      background: #11131e;
+      border: 1px solid #23263a;
+      border-radius: 4px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      overflow: hidden;
+    }
+    .grid-cell:hover {
+      border-color: var(--ruby-primary);
+      background: #1a1d2e;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    }
+    .grid-cell.occupied {
+      background: linear-gradient(135deg, #151827 0%, #1c1318 100%);
+      border-color: #3b1b22;
+    }
+    .grid-cell.occupied.artefato { border-color: #dc2626; box-shadow: inset 0 0 8px rgba(220, 38, 38, 0.4); }
+    .grid-cell.occupied.superior { border-color: #38bdf8; }
+    .grid-cell.occupied.alquimia { border-color: #10b981; }
+    .grid-cell .cell-icon {
+      font-size: 1.6rem;
+    }
+    .grid-cell .cell-badge-qty {
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    /* =========================================================
+       TODAS AS 29 PERÍCIAS DE TORMENTA 20
+       ========================================================= */
+    .skills-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .skills-search-wrap {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .skills-search-wrap input {
+      width: 100%;
+      background: #0b0c14;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .skills-search-wrap input:focus {
+      border-color: var(--ruby-primary);
+      box-shadow: var(--ruby-glow);
+    }
+
+    .skills-table-full {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 8px;
+    }
+    .skill-row-card {
+      background: #0f1019;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
       padding: 8px 12px;
@@ -626,32 +836,51 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .skill-card:hover {
-      background: #1a1c2d;
+    .skill-row-card:hover {
+      background: #181928;
       border-color: var(--ruby-primary);
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
     }
-    .skill-left {
+    .skill-row-card.trained {
+      border-left: 3px solid var(--ruby-primary);
+      background: rgba(239, 68, 68, 0.04);
+    }
+    .skill-row-card.resistance {
+      border-left: 3px solid var(--mana-cyan);
+    }
+    .skill-left-wrap {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .skill-atrib {
-      font-size: 0.7rem;
-      font-weight: 700;
+    .skill-atrib-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
       color: #f87171;
       background: #2b1114;
       padding: 2px 6px;
       border-radius: 4px;
     }
-    .skill-name {
+    .skill-title-name {
       font-size: 0.88rem;
       font-weight: 600;
       color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
-    .skill-bonus {
+    .skill-trained-star {
+      color: #fbbf24;
+      font-size: 0.8rem;
+    }
+    .skill-lock-icon {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+    }
+    .skill-right-bonus {
       font-family: var(--font-title);
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: #fff;
     }
@@ -663,7 +892,7 @@
       gap: 10px;
     }
     .action-card {
-      background: #12131d;
+      background: #0f1019;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       padding: 12px;
@@ -674,7 +903,7 @@
       justify-content: space-between;
     }
     .action-card:hover {
-      background: #1c1e2f;
+      background: #181928;
       border-color: var(--purple-usurp);
       box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
     }
@@ -704,33 +933,6 @@
       font-size: 0.75rem;
       color: var(--text-muted);
       line-height: 1.35;
-    }
-
-    /* Paperdoll e Slots de Equipamento */
-    .paperdoll-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 8px;
-    }
-    .paperdoll-slot {
-      background: #10111a;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 8px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .slot-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: #f87171;
-      text-transform: uppercase;
-    }
-    .slot-val {
-      font-size: 0.85rem;
-      color: #fff;
-      font-weight: 500;
     }
 
     /* =========================================================
@@ -959,7 +1161,7 @@
       bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(15, 16, 22, 0.95);
+      background: rgba(12, 13, 20, 0.95);
       border: 1px solid var(--ruby-border);
       border-radius: 30px;
       padding: 6px 16px;
@@ -1022,7 +1224,7 @@
 
   <!-- =========================================================
        HEADER DA APLICAÇÃO & NAVEGAÇÃO
-       ========================================================= -->
+       ========================================================= */ -->
   <header class="rpg-header">
     <div class="header-top">
       <div class="brand-title">
@@ -1068,7 +1270,7 @@
 
   <!-- =========================================================
        CONTEÚDO PRINCIPAL (PAINÉIS)
-       ========================================================= -->
+       ========================================================= */ -->
   <main class="rpg-main">
 
     <!-- =========================================================
@@ -1138,17 +1340,17 @@
               🛡️ Testes de Resistência
             </div>
             <div style="display:flex; justify-content:space-between; font-size:0.88rem; margin-bottom:4px;">
-              <span><strong>Fortitude:</strong> +4</span>
-              <span><strong>Reflexos:</strong> +6</span>
-              <span><strong>Vontade:</strong> +4</span>
+              <span style="cursor:pointer;" onclick="rollCheck('Fortitude', 4)"><strong>Fortitude:</strong> +4 🎲</span>
+              <span style="cursor:pointer;" onclick="rollCheck('Reflexos', 6)"><strong>Reflexos:</strong> +6 🎲</span>
+              <span style="cursor:pointer;" onclick="rollCheck('Vontade', 4)"><strong>Vontade:</strong> +4 🎲</span>
             </div>
             <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
-              +1 geral de <em>Discrição Divina</em> somado. Visão na Penumbra.
+              +1 de <em>Discrição Divina</em> somado. Visão na Penumbra.
             </div>
           </div>
         </aside>
 
-        <!-- CENTRO: COMBATE, COMBOS DO ARCO, AÇÕES E PERÍCIAS -->
+        <!-- CENTRO: COMBATE, INVENTÁRIO DIABLO, PERÍCIAS E AÇÕES -->
         <section class="sheet-main-content">
           
           <!-- 4 STATS CENTRAIS -->
@@ -1186,7 +1388,7 @@
             </p>
             <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap;">
               <button class="btn-sm" style="flex:none;" onclick="triggerBowState('miss')">❌ Errar Disparo (+Frustração)</button>
-              <button class="btn-sm" style="flex:none;" onclick="triggerBowState('crit')">🔥 Acerto Crítico (Orgulho da Arma / Limpar)</button>
+              <button class="btn-sm" style="flex:none;" onclick="triggerBowState('crit')">🔥 Acerto Crítico (Orgulho / Limpar)</button>
               <button class="btn-sm" style="flex:none;" onclick="triggerBowState('reset')">↺ Restaurar Normal</button>
             </div>
           </div>
@@ -1202,6 +1404,81 @@
             </div>
           </div>
 
+          <!-- =========================================================
+               INVENTÁRIO ESTILO DIABLO & SLOTS DE TORMENTA 20
+               ========================================================= -->
+          <div class="sheet-section">
+            <div class="section-header">
+              <h3>🎒 Inventário Estilo Diablo & Slots de Tormenta 20</h3>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:0.8rem; color:var(--emerald);" id="vestidosStatus">🧥 Itens Vestidos: 4 / 4 Ativos (Limite JdA)</span>
+              </div>
+            </div>
+
+            <div class="diablo-inventory-container">
+              
+              <!-- Paperdoll Anatômico (Equipment Slots) -->
+              <div class="diablo-paperdoll">
+                <div style="font-family:var(--font-title); font-size:0.82rem; color:#f87171; text-transform:uppercase; font-weight:700; border-bottom:1px solid #231215; padding-bottom:4px;">
+                  👤 Silhueta de Equipamento (Paperdoll)
+                </div>
+                
+                <div class="paperdoll-slots-layout" id="diabloPaperdollGrid">
+                  <!-- Povoado dinamicamente -->
+                </div>
+              </div>
+
+              <!-- Mochila Quadriculada de Células (Diablo Backpack Grid) -->
+              <div class="diablo-backpack">
+                <div class="backpack-capacity-bar">
+                  <div class="capacity-header">
+                    <span>⚖️ Capacidade de Carga (T20 JdA)</span>
+                    <span id="cargaText">7 / 10 Espaços (Força 0)</span>
+                  </div>
+                  <div class="capacity-track">
+                    <div class="capacity-fill" id="cargaFill" style="width: 70%;"></div>
+                  </div>
+                </div>
+
+                <div style="font-family:var(--font-title); font-size:0.82rem; color:#f87171; text-transform:uppercase; font-weight:700;">
+                  📦 Mochila de Aventureiro (Grid de Células)
+                </div>
+
+                <div class="backpack-grid-cells" id="diabloBackpackGrid">
+                  <!-- Povoado dinamicamente com as células de Diablo -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- =========================================================
+               TODAS AS 29 PERÍCIAS DE TORMENTA 20
+               ========================================================= -->
+          <div class="sheet-section">
+            <div class="section-header">
+              <h3>🎯 Perícias do Personagem (Tormenta 20 JdA)</h3>
+              <span style="font-size:0.78rem; color:var(--text-muted);">Todas as 29 perícias com bônus calculados e rolagens imediatas</span>
+            </div>
+
+            <div class="skills-search-wrap">
+              <input type="search" id="charSkillSearch" placeholder="Filtrar perícias do personagem (Enganação, Furtividade, Fortitude...)" aria-label="Filtrar perícias">
+            </div>
+
+            <div class="skills-filter-row" id="charSkillFilterRow">
+              <button class="pill active" data-sfilter="all">Todas (29)</button>
+              <button class="pill" data-sfilter="trained">⭐ Treinadas (9)</button>
+              <button class="pill" data-sfilter="res">🛡️ Resistências (3)</button>
+              <button class="pill" data-sfilter="car">🎭 Carisma</button>
+              <button class="pill" data-sfilter="des">🏹 Destreza</button>
+              <button class="pill" data-sfilter="int-sab-for">🧠 Int / Sab / For</button>
+            </div>
+
+            <div class="skills-table-full" id="characterSkillsFullList">
+              <!-- Renderizado dinamicamente -->
+            </div>
+          </div>
+
           <!-- AÇÕES TÁTICAS DE USURPADOR -->
           <div class="sheet-section">
             <div class="section-header">
@@ -1209,28 +1486,6 @@
               <span style="font-size:0.78rem; color:var(--text-muted);">Farsa divina & habilidades táticas</span>
             </div>
             <div class="actions-grid" id="actionsList">
-              <!-- Renderizado dinamicamente -->
-            </div>
-          </div>
-
-          <!-- PERÍCIAS TREINADAS E BÔNUS -->
-          <div class="sheet-section">
-            <div class="section-header">
-              <h3>🎯 Perícias Treinadas & Testes Reais</h3>
-              <span style="font-size:0.78rem; color:var(--text-muted);">Clique para rolar teste</span>
-            </div>
-            <div class="skills-table" id="skillsList">
-              <!-- Renderizado dinamicamente -->
-            </div>
-          </div>
-
-          <!-- PAPERDOLL & ITENS VESTIDOS (REGRA 4/4 JdA) -->
-          <div class="sheet-section">
-            <div class="section-header">
-              <h3>🧥 Equipamento & Paperdoll (4/4 Itens Vestidos JdA)</h3>
-              <span style="font-size:0.78rem; color:var(--emerald);">Limite de Vestidos: 4 / 4 Ativos</span>
-            </div>
-            <div class="paperdoll-grid" id="paperdollList">
               <!-- Renderizado dinamicamente -->
             </div>
           </div>
@@ -1453,6 +1708,14 @@
           gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
           osc.start(now);
           osc.stop(now + 0.3);
+        } else if (type === 'heal') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(350, now);
+          osc.frequency.exponentialRampToValueAtTime(700, now + 0.35);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
         } else {
           osc.type = 'sine';
           osc.frequency.setValueAtTime(400, now);
@@ -1474,7 +1737,6 @@
        2. CONTROLE DE NAVEGAÇÃO ENTRE ABAS
        ========================================================= */
     const tabButtons = document.querySelectorAll('button[role="tab"]');
-    const tabPanels = document.querySelectorAll('div[role="tabpanel"]');
 
     function selectTab(selectedTab) {
       playSound('click');
@@ -1500,6 +1762,7 @@
     let characters = (window.T20_DATA && window.T20_DATA.characters) || [];
     let currentCharacterIndex = 0;
     let bowState = 'normal'; // 'normal', 'frustrado', 'esmorecido'
+    let charSkillFilter = 'all';
 
     function renderCharacter() {
       const c = characters[currentCharacterIndex];
@@ -1532,7 +1795,6 @@
       attrContainer.innerHTML = '';
       attrs.forEach(a => {
         let modVal = a.val;
-        // Penalidade de frustração se aplicável
         if (bowState === 'frustrado' && ['INT', 'SAB', 'CAR'].includes(a.key)) modVal -= 2;
         if (bowState === 'esmorecido') modVal -= 2;
 
@@ -1575,14 +1837,16 @@
         attacksList.appendChild(item);
       });
 
+      // Renderiza Inventário Diablo e Paperdoll
+      renderDiabloInventory(c);
+
+      // Renderiza Todas as 29 Perícias
+      renderCharacterSkills(c);
+
       // Ações Táticas de Usurpador
       const actionsList = document.getElementById('actionsList');
       actionsList.innerHTML = '';
-      const acoes = c.acoes_usurpador || [
-        { nome: "Usurpar", custo: "Variável", tipo: "Ação Padrão", desc: "Lança magia divina com teste de Enganação (+13) contra CD 15 + PM.", icone: "🔮" },
-        { nome: "Impostor", custo: "2 PM", tipo: "Livre (1x/cena)", desc: "Substitui qualquer teste de perícia por Enganação (+13).", icone: "🎭" },
-        { nome: "Canalização Falsa", custo: "1 PM", tipo: "Ação Padrão", desc: "Canaliza cura ou dano de 2d8+2 em cone curto.", icone: "⚡" }
-      ];
+      const acoes = c.acoes_usurpador || [];
       acoes.forEach(ac => {
         const acCard = document.createElement('div');
         acCard.className = 'action-card';
@@ -1599,55 +1863,181 @@
         `;
         actionsList.appendChild(acCard);
       });
-
-      // Tabela de Perícias Reais
-      const skillsList = document.getElementById('skillsList');
-      skillsList.innerHTML = '';
-      const pericias = c.pericias_lista || [
-        { nome: "Enganação", atrib: "CAR", bonus: 13, detalhe: "Base de Usurpar e Impostor" },
-        { nome: "Furtividade", atrib: "DES", bonus: 8, detalhe: "Penalidade 0" },
-        { nome: "Pontaria", atrib: "DES", bonus: 7, detalhe: "Ataques com arco" },
-        { nome: "Iniciativa", atrib: "DES", bonus: 7, detalhe: "Reação em combate" },
-        { nome: "Misticismo", atrib: "INT", bonus: 5, detalhe: "Auras arcanas" }
-      ];
-      pericias.forEach(sk => {
-        let mod = sk.bonus;
-        if (bowState === 'frustrado' && ['CAR', 'INT', 'SAB'].includes(sk.atrib)) mod -= 2;
-        if (bowState === 'esmorecido') mod -= 2;
-
-        const card = document.createElement('div');
-        card.className = 'skill-card';
-        card.innerHTML = `
-          <div class="skill-left">
-            <span class="skill-atrib">${sk.atrib}</span>
-            <span class="skill-name">${sk.nome}</span>
-          </div>
-          <span class="skill-bonus">+${mod}</span>
-        `;
-        card.onclick = () => rollCheck(`Perícia ${sk.nome}`, mod);
-        skillsList.appendChild(card);
-      });
-
-      // Paperdoll de Equipamento
-      const paperdollList = document.getElementById('paperdollList');
-      paperdollList.innerHTML = '';
-      const slots = c.paperdoll || {
-        "Mão Principal": "A Obra-Prima de Elarion",
-        "Armadura": "Couro Batido (+3 Defesa)",
-        "Costas / Ombros": "Capa Esvoaçante (+1 Enganação)",
-        "Pés": "Botas Reforçadas"
-      };
-      for (const [slot, item] of Object.entries(slots)) {
-        const slotEl = document.createElement('div');
-        slotEl.className = 'paperdoll-slot';
-        slotEl.innerHTML = `
-          <span class="slot-label">${slot}</span>
-          <span class="slot-val">${item}</span>
-        `;
-        paperdollList.appendChild(slotEl);
-      }
     }
 
+    /* =========================================================
+       INVENTÁRIO DIABLO & PAPERDOLL RENDERER
+       ========================================================= */
+    function renderDiabloInventory(c) {
+      // Paperdoll Grid
+      const paperdollGrid = document.getElementById('diabloPaperdollGrid');
+      paperdollGrid.innerHTML = '';
+      const slots = c.equipamento_diablo || {};
+
+      for (const [k, sl] of Object.entries(slots)) {
+        const slotEl = document.createElement('div');
+        const raridadeClass = sl.raridade || 'comum';
+        slotEl.className = `diablo-slot ${sl.equipado ? 'equipped' : ''} ${raridadeClass}`;
+        
+        slotEl.innerHTML = `
+          <div class="slot-icon">${sl.icone || '🛡️'}</div>
+          <div class="diablo-slot-meta">
+            <div class="slot-type">${sl.slot}</div>
+            <div class="item-name">${sl.nome}</div>
+            <div class="item-stat">${sl.stats || (sl.equipado ? 'Equipado' : 'Vazio')}</div>
+          </div>
+        `;
+
+        slotEl.onclick = () => {
+          if (!sl.equipado) {
+            openModal(`Slot de ${sl.slot}`, ['Equipamento', 'Vazio'], `<p>Nenhum item equipado neste espaço corporal.</p>`);
+            return;
+          }
+          openModal(sl.nome, [sl.slot, sl.raridade ? sl.raridade.toUpperCase() : 'COMUM', sl.item_vestido ? 'Item Vestido (JdA)' : 'Item Geral'], `
+            <p><strong>Descrição:</strong> ${sl.desc || 'Equipamento ajustado ao herói.'}</p>
+            ${sl.stats ? `<p style="margin-top:8px;"><strong>Estatísticas / Efeito:</strong> ${sl.stats}</p>` : ''}
+            ${sl.item_vestido ? `<p style="margin-top:8px; color:var(--emerald);">✓ Ocupa 1 dos 4 slots de itens vestidos de Tormenta 20.</p>` : ''}
+          `);
+        };
+
+        paperdollGrid.appendChild(slotEl);
+      }
+
+      // Mochila Quadriculada (Diablo Cells)
+      const backpackGrid = document.getElementById('diabloBackpackGrid');
+      backpackGrid.innerHTML = '';
+      const items = c.mochila_diablo || [];
+      const totalCells = 16; // 4x4 Grid Diablo
+
+      for (let i = 0; i < totalCells; i++) {
+        const cell = document.createElement('div');
+        const it = items[i];
+
+        if (it) {
+          cell.className = `grid-cell occupied ${it.raridade || 'comum'}`;
+          cell.innerHTML = `
+            <span class="cell-icon">${it.icone || '📦'}</span>
+            ${it.qtd > 1 ? `<span class="cell-badge-qty">${it.qtd}</span>` : ''}
+          `;
+          cell.title = it.nome;
+          cell.onclick = () => openBackpackItemModal(it);
+        } else {
+          cell.className = 'grid-cell';
+          cell.innerHTML = `<span style="font-size:0.65rem; color:#272a3d;">${i + 1}</span>`;
+        }
+
+        backpackGrid.appendChild(cell);
+      }
+
+      // Atualiza barra de capacidade
+      const espacosMax = c.espacos_max || 10;
+      const espacosOcupados = c.espacos_ocupados || items.length;
+      document.getElementById('cargaText').textContent = `${espacosOcupados} / ${espacosMax} Espaços (Força 0)`;
+      const pct = Math.min(100, (espacosOcupados / espacosMax) * 100);
+      document.getElementById('cargaFill').style.width = pct + '%';
+    }
+
+    function openBackpackItemModal(it) {
+      let actionButtons = '';
+      if (it.consumivel && it.id === 'balsamo') {
+        actionButtons = `
+          <div style="margin-top:16px;">
+            <button class="btn-roll-atk" style="background:linear-gradient(135deg, #10b981 0%, #047857 100%); border-color:#34d399;" onclick="useBalsamo()">
+              🧪 Aplicar Bálsamo (+2d4 PV)
+            </button>
+          </div>
+        `;
+      }
+
+      openModal(it.nome, [it.tipo, `${it.espacos} Espaço(s)`, it.raridade ? it.raridade.toUpperCase() : 'COMUM'], `
+        <p><strong>Descrição:</strong> ${it.desc || 'Item mantido na mochila de aventureiro.'}</p>
+        <p style="margin-top:8px;"><strong>Carga / Volume:</strong> Ocupa ${it.espacos} espaço(s) de carga.</p>
+        ${actionButtons}
+      `);
+    }
+
+    function useBalsamo() {
+      const c = characters[currentCharacterIndex];
+      const d1 = Math.floor(Math.random() * 4) + 1;
+      const d2 = Math.floor(Math.random() * 4) + 1;
+      const curaTotal = d1 + d2;
+      c.pv_atual = Math.min(c.pv_total, c.pv_atual + curaTotal);
+      playSound('heal');
+      updateResourceUI();
+      closeModal();
+      showToast("Bálsamo Aplicado!", `+${curaTotal} PV Recuperados!`, `2d4 (${d1}+${d2}) | PV Atual: ${c.pv_atual}/${c.pv_total}`);
+    }
+
+    /* =========================================================
+       TODAS AS 29 PERÍCIAS DE TORMENTA 20
+       ========================================================= */
+    function renderCharacterSkills(c) {
+      const container = document.getElementById('characterSkillsFullList');
+      container.innerHTML = '';
+      const query = (document.getElementById('charSkillSearch').value || '').toLowerCase();
+      const pericias = c.pericias_lista || [];
+
+      const filtered = pericias.filter(p => {
+        const matchesQuery = p.nome.toLowerCase().includes(query) || (p.detalhe || '').toLowerCase().includes(query);
+        if (!matchesQuery) return false;
+
+        if (charSkillFilter === 'trained') return p.treinada;
+        if (charSkillFilter === 'res') return p.resistencia;
+        if (charSkillFilter === 'car') return p.atrib === 'CAR';
+        if (charSkillFilter === 'des') return p.atrib === 'DES';
+        if (charSkillFilter === 'int-sab-for') return ['INT', 'SAB', 'FOR'].includes(p.atrib);
+        return true;
+      });
+
+      filtered.forEach(p => {
+        let mod = p.bonus;
+        if (bowState === 'frustrado' && ['CAR', 'INT', 'SAB'].includes(p.atrib)) mod -= 2;
+        if (bowState === 'esmorecido') mod -= 2;
+
+        const row = document.createElement('div');
+        row.className = `skill-row-card ${p.treinada ? 'trained' : ''} ${p.resistencia ? 'resistance' : ''}`;
+        
+        row.innerHTML = `
+          <div class="skill-left-wrap">
+            <span class="skill-atrib-tag">${p.atrib}</span>
+            <span class="skill-title-name">
+              ${p.treinada ? '<span class="skill-trained-star" title="Treinada">⭐</span>' : ''}
+              ${p.somente_treinada && !p.treinada ? '<span class="skill-lock-icon" title="Somente Treinada">🔒</span>' : ''}
+              ${p.nome}
+            </span>
+          </div>
+          <span class="skill-right-bonus">+${mod}</span>
+        `;
+
+        row.onclick = () => {
+          if (p.somente_treinada && !p.treinada) {
+            showToast(`Perícia ${p.nome}`, `Somente Treinada!`, `Você não possui treino formal nesta perícia.`);
+            return;
+          }
+          rollCheck(`Perícia ${p.nome}`, mod);
+        };
+
+        container.appendChild(row);
+      });
+    }
+
+    document.getElementById('charSkillSearch').addEventListener('input', () => {
+      renderCharacterSkills(characters[currentCharacterIndex]);
+    });
+
+    document.querySelectorAll('#charSkillFilterRow .pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        playSound('click');
+        document.querySelectorAll('#charSkillFilterRow .pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        charSkillFilter = pill.getAttribute('data-sfilter');
+        renderCharacterSkills(characters[currentCharacterIndex]);
+      });
+    });
+
+    /* =========================================================
+       RECURSOS & GATILHOS
+       ========================================================= */
     function updateResourceUI() {
       const c = characters[currentCharacterIndex];
       if (!c) return;
@@ -1691,7 +2081,6 @@
       renderCharacter();
     });
 
-    /* Gatilhos de Frustração da Obra-Prima de Elarion */
     function triggerBowState(action) {
       if (action === 'miss') {
         if (bowState === 'normal') bowState = 'frustrado';
@@ -1796,7 +2185,7 @@
     }
 
     /* =========================================================
-       5. COMPÊNDIO DE ENTIDADES (DEUSES, CLASSES, RAÇAS, ORIGENS)
+       5. COMPÊNDIO DE ENTIDADES
        ========================================================= */
     let curEntityFilter = 'deuses';
     function renderEntities() {
@@ -1895,7 +2284,7 @@
     });
 
     /* =========================================================
-       6. COMPÊNDIO DE PODERES (8 CATEGORIAS OFICIAIS)
+       6. COMPÊNDIO DE PODERES
        ========================================================= */
     let allPowers = (window.T20_DATA && window.T20_DATA.powers) || [];
     let curPowerFilter = 'all';
@@ -2039,7 +2428,7 @@
     });
 
     /* =========================================================
-       8. INVENTÁRIO & ITENS
+       8. INVENTÁRIO & ITENS (COMPÊNDIO GERAL)
        ========================================================= */
     let allItems = (window.T20_DATA && window.T20_DATA.items) || [];
     let curItemFilter = 'all';
@@ -2102,7 +2491,7 @@
     });
 
     /* =========================================================
-       9. PERÍCIAS & CONDIÇÕES
+       9. PERÍCIAS & CONDIÇÕES (COMPÊNDIO GERAL)
        ========================================================= */
     let curRuleFilter = 'all';
 
