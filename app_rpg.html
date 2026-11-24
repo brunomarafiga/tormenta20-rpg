@@ -884,6 +884,159 @@
       font-weight: 800;
       color: #fff;
     }
+    .skill-right-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .skill-quick-roll-btn {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1;
+    }
+    .skill-quick-roll-btn:hover {
+      background: var(--ruby-primary);
+      color: #fff;
+      transform: scale(1.15);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+
+    /* Modal de Perícia & Condição Estilizado */
+    .skill-modal-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .skill-modal-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(15, 16, 25, 0.8));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .skill-modal-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #1e0d10;
+      border: 1px solid var(--ruby-primary);
+      border-radius: var(--radius-sm);
+      min-width: 60px;
+      padding: 6px 12px;
+    }
+    .skill-modal-score .score-number {
+      font-family: var(--font-title);
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #f87171;
+      line-height: 1;
+    }
+    .skill-modal-score .score-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .skill-modal-info {
+      flex: 1;
+      min-width: 180px;
+    }
+    .skill-modal-calc {
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      margin-bottom: 4px;
+    }
+    .skill-modal-status {
+      font-size: 0.8rem;
+    }
+    .skill-modal-callout {
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+    .skill-modal-callout.alert {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fecaca;
+    }
+    .skill-modal-callout.synergy {
+      background: rgba(14, 165, 233, 0.1);
+      border: 1px solid rgba(14, 165, 233, 0.35);
+      color: #bae6fd;
+    }
+    .skill-modal-desc-box {
+      background: #090a10;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .modal-rule-paragraph {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .modal-rule-list {
+      list-style-type: none;
+      padding-left: 0;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .modal-rule-list li {
+      position: relative;
+      padding-left: 20px;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+    .modal-rule-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 4px;
+      top: 0;
+      color: var(--ruby-primary);
+      font-weight: bold;
+    }
+    .t20-bold {
+      color: #fff;
+      font-weight: 700;
+    }
+    .condition-detail-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .condition-alert-banner {
+      background: rgba(239, 68, 68, 0.12);
+      border-left: 4px solid var(--ruby-primary);
+      padding: 10px 14px;
+      border-radius: 4px;
+      color: #fca5a5;
+      font-size: 0.9rem;
+    }
+    .condition-body-text {
+      background: #090a10;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      line-height: 1.65;
+    }
 
     /* Ações Rápidas de Usurpador */
     .actions-grid {
@@ -2018,6 +2171,112 @@
     /* =========================================================
        TODAS AS 29 PERÍCIAS DE TORMENTA 20
        ========================================================= */
+    function formatRuleTextToHtml(text) {
+      if (!text) return '<p class="modal-rule-paragraph">Sem descrição mecânica cadastrada.</p>';
+      const clean = cleanText(text);
+      const lines = clean.split('\n');
+      let html = '';
+      let inList = false;
+      lines.forEach(rawLine => {
+        let line = rawLine.trim();
+        if (!line) return;
+        if (line.startsWith('- ') || line.startsWith('* ')) {
+          if (!inList) { html += '<ul class="modal-rule-list">'; inList = true; }
+          let item = line.substring(2).trim();
+          item = item.replace(/\*\*([^*]+)\*\*/g, '<strong class="t20-bold">$1</strong>');
+          html += `<li>${item}</li>`;
+        } else {
+          if (inList) { html += '</ul>'; inList = false; }
+          let p = line.replace(/\*\*([^*]+)\*\*/g, '<strong class="t20-bold">$1</strong>');
+          html += `<p class="modal-rule-paragraph">${p}</p>`;
+        }
+      });
+      if (inList) html += '</ul>';
+      return html;
+    }
+
+    function openSkillDetailModal(p, mod) {
+      playSound('click');
+      const allPericias = (window.T20_DATA && window.T20_DATA.pericias) || [];
+      const canon = allPericias.find(x => cleanText(x.nome).toLowerCase() === cleanText(p.nome).toLowerCase()) || {};
+      
+      const tags = [
+        `🎯 Atributo: ${p.atrib}`,
+        p.treinada ? '⭐ Treinada (+2)' : 'Não Treinada (+0)',
+        p.somente_treinada ? '🔒 Somente Treinada' : '🔓 Uso Livre'
+      ];
+      if (p.resistencia) tags.push('🛡️ Resistência');
+      if (canon.penalidade_armadura) tags.push('⚖️ Penalidade de Armadura');
+
+      let descText = canon.description || '';
+      if (!descText && canon.resumo) descText = canon.resumo;
+      if (!descText) descText = 'Perícia oficial do sistema Tormenta 20 JdA.';
+
+      const descHtml = formatRuleTextToHtml(descText);
+
+      let bodyHtml = `
+        <div class="skill-modal-container">
+          <div class="skill-modal-banner">
+            <div class="skill-modal-score">
+              <span class="score-number">+${mod}</span>
+              <span class="score-label">Bônus</span>
+            </div>
+            <div class="skill-modal-info">
+              <div class="skill-modal-calc"><strong>Bônus na Ficha:</strong> +${mod}</div>
+              <div style="font-size:0.83rem; color:var(--text-muted);">${p.detalhe || `Metade do Nível (2) + ${p.atrib}`}</div>
+              <div class="skill-modal-status" style="margin-top:4px;">
+                ${p.treinada ? '<span style="color:#fbbf24;">✓ Treinada (Soma bônus de treino)</span>' : '<span style="color:var(--text-muted);">✗ Não treinada (Somente metade do nível + atributo)</span>'}
+              </div>
+            </div>
+            <button type="button" class="rpg-btn primary" id="modalRollActionBtn" style="padding: 10px 18px; margin-left: auto;">
+              🎲 Rolar Teste (+${mod})
+            </button>
+          </div>
+      `;
+
+      if (p.somente_treinada && !p.treinada) {
+        bodyHtml += `
+          <div class="skill-modal-callout alert">
+            ⚠️ <strong>Somente Treinada:</strong> Esta perícia exige treinamento formal para a maioria dos testes complexos.
+            <div style="margin-top:4px; color:#fca5a5;">
+              🎭 <strong>Truque de Usurpador:</strong> Khinlannas pode gastar <strong>2 PM</strong> com a habilidade <strong>Impostor</strong> para rolar <strong>Enganação (+13)</strong> no lugar deste teste!
+            </div>
+          </div>
+        `;
+      } else if (p.nome === 'Enganação') {
+        bodyHtml += `
+          <div class="skill-modal-callout synergy">
+            🎭 <strong>Perícia Mestra de Khinlannas:</strong> Usada para <em>Usurpar Magias Divinas</em> (CD 15 + PM), substituir perícias via <em>Impostor</em> (2 PM) e rolar novamente com <em>Foco em Perícia</em> (1 PM). Bônus inclui +1 da <em>Capa Esvoaçante</em>.
+          </div>
+        `;
+      }
+
+      bodyHtml += `
+          <div class="skill-modal-desc-box">
+            <h4 style="color:var(--ruby-light); margin-bottom:8px; font-size:0.95rem; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:6px;">
+              <span>📜</span> O Que Esta Perícia Faz (Regras Oficiais JdA)
+            </h4>
+            <div class="rule-content-body">
+              ${descHtml}
+            </div>
+          </div>
+        </div>
+      `;
+
+      openModal(`🎯 Perícia: ${p.nome}`, tags, bodyHtml);
+
+      const rollBtn = document.getElementById('modalRollActionBtn');
+      if (rollBtn) {
+        rollBtn.onclick = () => {
+          if (p.somente_treinada && !p.treinada) {
+            showToast(`Perícia ${p.nome}`, `Somente Treinada!`, `Você não possui treino formal nesta perícia.`);
+          }
+          rollCheck(`Perícia ${p.nome}`, mod);
+          closeModal();
+        };
+      }
+    }
+
     function renderCharacterSkills(c) {
       const container = document.getElementById('characterSkillsFullList');
       container.innerHTML = '';
@@ -2053,16 +2312,27 @@
               ${p.nome}
             </span>
           </div>
-          <span class="skill-right-bonus">+${mod}</span>
+          <div class="skill-right-wrap">
+            <span class="skill-right-bonus">+${mod}</span>
+            <button type="button" class="skill-quick-roll-btn" title="Rolar Teste Imediato de ${p.nome} (+${mod})" aria-label="Rolar d20">🎲</button>
+          </div>
         `;
 
         row.onclick = () => {
-          if (p.somente_treinada && !p.treinada) {
-            showToast(`Perícia ${p.nome}`, `Somente Treinada!`, `Você não possui treino formal nesta perícia.`);
-            return;
-          }
-          rollCheck(`Perícia ${p.nome}`, mod);
+          openSkillDetailModal(p, mod);
         };
+
+        const quickBtn = row.querySelector('.skill-quick-roll-btn');
+        if (quickBtn) {
+          quickBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (p.somente_treinada && !p.treinada) {
+              showToast(`Perícia ${p.nome}`, `Somente Treinada!`, `Você não possui treino formal nesta perícia.`);
+              return;
+            }
+            rollCheck(`Perícia ${p.nome}`, mod);
+          };
+        }
 
         container.appendChild(row);
       });
@@ -3194,18 +3464,19 @@
       const condicoes = (window.T20_DATA && window.T20_DATA.conditions) || [];
 
       let list = [];
-      if (curRuleFilter === 'all' || curRuleFilter === 'pericia') {
-        pericias.forEach(p => list.push({ ...p, rule_kind: 'pericia' }));
-      }
       if (curRuleFilter === 'all' || curRuleFilter === 'condicao') {
         condicoes.forEach(c => list.push({ ...c, rule_kind: 'condicao' }));
       }
+      if (curRuleFilter === 'all' || curRuleFilter === 'pericia') {
+        pericias.forEach(p => list.push({ ...p, rule_kind: 'pericia' }));
+      }
 
       const filtered = list.filter(r => {
-        const n = (r.nome || r.name || '').toLowerCase();
-        const d = (r.description || '').toLowerCase();
-        return n.includes(query) || d.includes(query);
-      }).slice(0, 75);
+        const n = cleanText(r.nome || r.name || '').toLowerCase();
+        const d = cleanText(r.description || '').toLowerCase();
+        const e = cleanText(r.tipo_efeito || '').toLowerCase();
+        return n.includes(query) || d.includes(query) || e.includes(query);
+      }).slice(0, 100);
 
       filtered.forEach(r => {
         const card = document.createElement('div');
@@ -3214,21 +3485,57 @@
         const title = cleanText(r.nome || r.name);
         const tag = isPericia ? `Perícia (${cleanText(r.atributo_chave || 'Geral')})` : 'Condição';
         const badgeClass = isPericia ? 'classe' : 'tormenta';
-        const ruleDesc = cleanText(r.description || 'Regra canônica do sistema.');
+        const rawDesc = cleanText(r.description || 'Regra canônica do sistema.');
+        const shortDesc = rawDesc.length > 165 ? rawDesc.slice(0, 162) + '...' : rawDesc;
 
         card.innerHTML = `
           <div class="rpg-card-header">
             <h3>${isPericia ? '🎯' : '⚠️'} ${title}</h3>
             <span class="rpg-badge ${badgeClass}">${tag}</span>
           </div>
-          <p class="rpg-card-desc">${ruleDesc}</p>
+          <p class="rpg-card-desc">${shortDesc}</p>
           <div class="rpg-card-footer">
-            <span>${isPericia ? (r.somente_treinada ? '🔒 Somente Treinada' : '🔓 Livre') : 'Estado Mecânico'}</span>
+            <span>${isPericia ? (r.somente_treinada ? '🔒 Somente Treinada' : '🔓 Uso Livre') : (r.tipo_efeito ? `Efeito: ${cleanText(r.tipo_efeito)}` : 'Estado Mecânico')}</span>
             <span>Inspecionar ➜</span>
           </div>
         `;
 
-        card.onclick = () => openModal(title, [tag], `<p>${ruleDesc}</p>`);
+        card.onclick = () => {
+          if (isPericia) {
+            const tags = [
+              `🎯 Atributo: ${cleanText(r.atributo_chave || 'Geral')}`,
+              r.somente_treinada ? '🔒 Somente Treinada' : '🔓 Uso Livre'
+            ];
+            if (r.penalidade_armadura) tags.push('⚖️ Penalidade de Armadura');
+            const body = `
+              <div class="skill-modal-desc-box">
+                <h4 style="color:var(--ruby-light); margin-bottom:8px; font-size:0.95rem; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:6px;">
+                  <span>📜</span> Regras Oficiais e Usos da Perícia
+                </h4>
+                <div class="rule-content-body">
+                  ${formatRuleTextToHtml(r.description)}
+                </div>
+              </div>
+            `;
+            openModal(`🎯 Perícia: ${title}`, tags, body);
+          } else {
+            const tags = ['⚠️ Condição do Sistema'];
+            if (r.tipo_efeito) tags.push(`Efeito: ${cleanText(r.tipo_efeito)}`);
+            if (r.tipo_condicao) tags.push(cleanText(r.tipo_condicao));
+            const body = `
+              <div class="condition-detail-card">
+                <div class="condition-alert-banner">
+                  ⚠️ <strong>Efeito Mecânico Oficial de ${title}:</strong>
+                </div>
+                <div class="condition-body-text">
+                  ${formatRuleTextToHtml(r.description)}
+                </div>
+              </div>
+            `;
+            openModal(`⚠️ Condição: ${title}`, tags, body);
+          }
+        };
+
         grid.appendChild(card);
       });
     }
