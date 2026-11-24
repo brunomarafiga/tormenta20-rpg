@@ -2,7 +2,7 @@
 
 Base de conhecimento estruturada em Markdown para **Obsidian**, cobrindo regras, entidades e referências do sistema **Tormenta 20 (Edição Jogo do Ano)** e suplementos oficiais (*Heróis de Arton*, *Deuses de Arton*, *Atlas de Arton*, *Ameaças de Arton* e *Dragão Brasil*).
 
-Este repositório mantém **exclusivamente os arquivos originais do cofre Obsidian** (notas atômicas, índices dinâmicos, templates, snippets CSS e configurações de plugins). Para geração interativa de fichas na web em projeto separado, utilize ou faça um fork do projeto open-source [**Fichas de Nimb**](https://github.com/YuriAlessandro/gerador-ficha-tormenta20).
+Este repositório mantém **exclusivamente os arquivos originais do cofre Obsidian** (notas atômicas, índices dinâmicos, templates, snippets CSS e configurações de plugins). Para geração interativa de fichas na web em projeto separado, utilize o fork [**Fichas de Nimb (`brunomarafiga/gerador-ficha-tormenta20`)**](https://github.com/brunomarafiga/gerador-ficha-tormenta20), baseado no projeto open-source [`YuriAlessandro/gerador-ficha-tormenta20`](https://github.com/YuriAlessandro/gerador-ficha-tormenta20).
 
 ---
 
