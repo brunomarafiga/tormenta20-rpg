@@ -1085,13 +1085,52 @@
       border: 1px solid var(--ruby-border);
       border-radius: var(--radius-lg);
       padding: 0;
-      max-width: 650px;
-      width: 90vw;
+      max-width: 840px;
+      width: 94vw;
+      max-height: 88vh;
       margin: auto;
       box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 25px rgba(239, 68, 68, 0.35);
       outline: none;
     }
-    dialog#inspectModal::backdrop {
+
+    .subfilter-bar {
+      background: rgba(18, 20, 31, 0.7);
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: 140px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    .subfilter-bar .pill {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #181b29;
+      border: 1px solid #2e344d;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .subfilter-bar .pill:hover {
+      border-color: var(--ruby-primary);
+      color: #fff;
+    }
+
+    .subfilter-bar .pill.active {
+      background: var(--ruby-dark);
+      border-color: var(--ruby-bright);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+    }
+
+    #inspectModal::backdrop {
       background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(5px);
     }
@@ -1536,6 +1575,9 @@
           <button class="pill" data-filter="origem">Origem</button>
           <button class="pill" data-filter="racial">Racial</button>
         </div>
+        <div class="filter-pills-row subfilter-bar" id="powerSubfilterPills" style="display: none;">
+          <!-- Povoado dinamicamente: subfiltros de Classes, Deuses ou Estilos de Combate -->
+        </div>
       </div>
 
       <div class="cards-grid" id="powersGrid">
@@ -1769,7 +1811,9 @@
       if (!c) return;
 
       document.getElementById('heroName').textContent = c.nome;
-      document.getElementById('heroClassRace').textContent = `${c.raca || ''} • ${c.classe || ''}`;
+      const heroCR = document.getElementById('heroClassRace');
+      const clsName = (c.classe || '').split(' ')[0] || 'Usurpador';
+      heroCR.innerHTML = `${cleanText(c.raca || '')} • <span style="cursor:pointer; color:var(--ruby-bright); text-decoration:underline dotted; font-weight:700;" title="Abrir Dossiê Completo da Classe" onclick="openClassDossier('${clsName}')">${cleanText(c.classe || '')} ⓘ</span>`;
       document.getElementById('heroAvatar').textContent = c.classe && c.classe.includes('Usurpador') ? '🔮' : '⚔️';
 
       // Atualiza PV e PM
@@ -2185,8 +2229,19 @@
     }
 
     /* =========================================================
-       5. COMPÊNDIO DE ENTIDADES
+       5. COMPÊNDIO DE ENTIDADES: PANTEÃO, CLASSES, RAÇAS, ORIGENS
        ========================================================= */
+    function cleanText(text) {
+      if (!text || typeof text !== 'string') return text || '';
+      return text.replace(/\[\[(?:[^\]\|]*\|)?([^\]]+)\]\]/g, '$1')
+                 .replace(/\[\[/g, '')
+                 .replace(/\]\]/g, '')
+                 .replace(/<span[^>]*>/g, '')
+                 .replace(/<\/span>/g, '')
+                 .replace(/\s+/g, ' ')
+                 .trim();
+    }
+
     let curEntityFilter = 'deuses';
     function renderEntities() {
       const grid = document.getElementById('entitiesGrid');
@@ -2202,10 +2257,10 @@
       else if (curEntityFilter === 'origens') list = db.origens || [];
 
       const filtered = list.filter(item => {
-        const n = (item.nome || item.file_name || '').toLowerCase();
-        const d = (item.description || '').toLowerCase();
+        const n = cleanText(item.nome || item.file_name || '').toLowerCase();
+        const d = cleanText(item.description || '').toLowerCase();
         return n.includes(query) || d.includes(query);
-      }).slice(0, 75);
+      }).slice(0, 100);
 
       filtered.forEach(it => {
         const card = document.createElement('div');
@@ -2215,7 +2270,7 @@
 
         if (curEntityFilter === 'deuses') {
           badgeType = 'concedido';
-          badgeText = it.canalizacao ? `Canalização: ${it.canalizacao}` : 'Divindade Maior';
+          badgeText = it.canalizacao ? `Canalização: ${cleanText(it.canalizacao)}` : 'Divindade Maior';
         } else if (curEntityFilter === 'classes') {
           badgeType = 'combate';
           badgeText = it.subtipo === 'classe-variante' ? 'Classe Variante' : 'Classe Base';
@@ -2224,50 +2279,55 @@
           badgeText = 'Raça de Arton';
         } else if (curEntityFilter === 'origens') {
           badgeType = 'tormenta';
-          badgeText = it.subtipo || 'Origem';
+          badgeText = cleanText(it.subtipo || 'Origem');
         }
 
+        const itemName = cleanText(it.nome || it.file_name);
         card.innerHTML = `
           <div class="rpg-card-header">
-            <h3>${it.nome || it.file_name}</h3>
+            <h3>${curEntityFilter === 'classes' ? '⚔️ ' : curEntityFilter === 'deuses' ? '👑 ' : ''}${itemName}</h3>
             <span class="rpg-badge ${badgeType}">${badgeText}</span>
           </div>
-          <p class="rpg-card-desc">${it.description || 'Entidade canônica registrada no cofre Tormenta 20.'}</p>
+          <p class="rpg-card-desc">${cleanText(it.description || 'Entidade canônica registrada no cofre Tormenta 20.')}</p>
           <div class="rpg-card-footer">
-            <span>📖 Fonte: ${it.fonte || 'Tormenta20 JdA'}</span>
-            <span>Inspecionar ➜</span>
+            <span>📖 Fonte: ${cleanText(it.fonte || 'Tormenta20 JdA')}</span>
+            <span style="color:var(--ruby-bright); font-weight:700;">${curEntityFilter === 'classes' ? 'Ver Dossiê Completo ➜' : 'Inspecionar ➜'}</span>
           </div>
         `;
 
-        card.onclick = () => {
-          let extra = '';
-          if (it.armas_sagradas && it.armas_sagradas.length) {
-            extra += `<p><strong>Armas Sagradas:</strong> ${it.armas_sagradas.join(', ')}</p>`;
-          }
-          if (it.poderes_concedidos && it.poderes_concedidos.length) {
-            extra += `<p style="margin-top:8px;"><strong>Poderes Concedidos:</strong> ${it.poderes_concedidos.join(', ')}</p>`;
-          }
-          if (it.proficiencias && it.proficiencias.length) {
-            extra += `<p><strong>Proficiências:</strong> ${it.proficiencias.join(', ')}</p>`;
-          }
-          if (it.pv_inicial) {
-            extra += `<p><strong>PV Inicial:</strong> ${it.pv_inicial} (+${it.pv_nivel || 0}/nível) | <strong>PM Inicial:</strong> ${it.pm_inicial || 0} (+${it.pm_nivel || 0}/nível)</p>`;
-          }
-          if (it.habilidades_raciais && it.habilidades_raciais.length) {
-            extra += `<p><strong>Habilidades Raciais:</strong> ${it.habilidades_raciais.join(', ')}</p>`;
-          }
-          if (it.pericias && it.pericias.length) {
-            extra += `<p><strong>Perícias Concedidas:</strong> ${it.pericias.join(', ')}</p>`;
-          }
-          if (it.poderes && it.poderes.length) {
-            extra += `<p><strong>Poderes Concedidos:</strong> ${it.poderes.join(', ')}</p>`;
-          }
+        if (curEntityFilter === 'classes') {
+          card.onclick = () => openClassDossier(itemName);
+        } else {
+          card.onclick = () => {
+            let extra = '';
+            if (it.armas_sagradas && it.armas_sagradas.length) {
+              extra += `<p><strong>Armas Sagradas:</strong> ${it.armas_sagradas.map(cleanText).join(', ')}</p>`;
+            }
+            if (it.poderes_concedidos && it.poderes_concedidos.length) {
+              extra += `<p style="margin-top:8px;"><strong>Poderes Concedidos:</strong> ${it.poderes_concedidos.map(cleanText).join(', ')}</p>`;
+            }
+            if (it.proficiencias && it.proficiencias.length) {
+              extra += `<p><strong>Proficiências:</strong> ${it.proficiencias.map(cleanText).join(', ')}</p>`;
+            }
+            if (it.pv_inicial) {
+              extra += `<p><strong>PV Inicial:</strong> ${it.pv_inicial} (+${it.pv_nivel || 0}/nível) | <strong>PM Inicial:</strong> ${it.pm_inicial || 0} (+${it.pm_nivel || 0}/nível)</p>`;
+            }
+            if (it.habilidades_raciais && it.habilidades_raciais.length) {
+              extra += `<p><strong>Habilidades Raciais:</strong> ${it.habilidades_raciais.map(cleanText).join(', ')}</p>`;
+            }
+            if (it.pericias && it.pericias.length) {
+              extra += `<p><strong>Perícias Concedidas:</strong> ${it.pericias.map(cleanText).join(', ')}</p>`;
+            }
+            if (it.poderes && it.poderes.length) {
+              extra += `<p><strong>Poderes Concedidos:</strong> ${it.poderes.map(cleanText).join(', ')}</p>`;
+            }
 
-          openModal(it.nome || it.file_name, [badgeText, it.fonte || 'Tormenta20 JdA'], `
-            <p style="margin-bottom:12px;">${it.description || 'Informação extraída diretamente dos manuais de Arton.'}</p>
-            ${extra}
-          `);
-        };
+            openModal(itemName, [badgeText, cleanText(it.fonte || 'Tormenta20 JdA')], `
+              <p style="margin-bottom:12px; font-size:0.95rem; line-height:1.6;">${cleanText(it.description || 'Informação extraída diretamente dos manuais de Arton.')}</p>
+              ${extra}
+            `);
+          };
+        }
         grid.appendChild(card);
       });
     }
@@ -2284,10 +2344,229 @@
     });
 
     /* =========================================================
-       6. COMPÊNDIO DE PODERES
+       DOSSIÊ COMPLETO DA CLASSE (PROGRESSÃO, STATS E HABILIDADES)
+       ========================================================= */
+    function openClassDossier(nomeClasse) {
+      const cleanName = cleanText(nomeClasse).toLowerCase();
+      const db = window.T20_DATA || {};
+      const cls = (db.classes || []).find(c => cleanText(c.nome || c.file_name || '').toLowerCase() === cleanName) ||
+                  (db.classes || []).find(c => cleanText(c.nome || c.file_name || '').toLowerCase().includes(cleanName));
+
+      if (!cls) {
+        showToast("Classe não encontrada", `A classe "${nomeClasse}" não foi localizada no compêndio.`);
+        return;
+      }
+
+      playSound('click');
+      const title = `⚔️ ${cleanText(cls.nome || cls.file_name)}`;
+      const subtipo = cls.subtipo === 'classe-variante' ? 'Classe Variante' : 'Classe Base';
+      const fonte = cleanText(cls.fonte || 'Tormenta20 JdA');
+      const tags = [subtipo, fonte];
+      if (cls.classe_base) tags.push(`Classe Base: ${cleanText(cls.classe_base)}`);
+
+      let html = `
+        <div class="class-dossier-wrap">
+          <!-- STATS ESSENCIAIS -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-bottom:16px; background:rgba(0,0,0,0.4); padding:12px; border-radius:8px; border:1px solid #2e344d;">
+            <div><span style="color:var(--ruby-bright); font-size:0.75rem; text-transform:uppercase; font-weight:700;">❤️ Pontos de Vida:</span><br><strong>${cls.pv_inicial} (+${cls.pv_por_nivel || cls.pv_nivel || 4} PV/nível)</strong></div>
+            <div><span style="color:var(--mana-cyan); font-size:0.75rem; text-transform:uppercase; font-weight:700;">💧 Pontos de Mana:</span><br><strong>${cls.pm_inicial} (+${cls.pm_por_nivel || cls.pm_nivel || 3} PM/nível)</strong></div>
+            <div><span style="color:var(--gold-accent); font-size:0.75rem; text-transform:uppercase; font-weight:700;">🎯 Atributo-Chave:</span><br><strong>${cleanText((cls.atributo_chave || []).join(', ') || 'Nenhum')}</strong></div>
+            <div><span style="color:#a78bfa; font-size:0.75rem; text-transform:uppercase; font-weight:700;">🛡️ Proficiências:</span><br><strong>${cleanText((cls.proficiencias || []).join(', ') || 'Armas Simples')}</strong></div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; background:rgba(18,20,31,0.5); padding:10px 14px; border-radius:8px; border:1px solid #1e293b; font-size:0.85rem;">
+            <div><strong style="color:var(--emerald);">🎯 Perícias Básicas:</strong> ${cleanText((cls.pericias_basicas || []).join(', ') || 'Nenhuma')}</div>
+            <div><strong style="color:var(--gold-accent);">📚 Perícias Adicionais:</strong> +${cls.pericias_adicionais || cls.pericias_escolha_qtd || 2} à escolha</div>
+          </div>
+      `;
+
+      if (cls.regras_variante) {
+        html += `
+          <div style="background:rgba(239, 68, 68, 0.12); border-left:4px solid var(--ruby-primary); padding:10px 14px; border-radius:4px; margin-bottom:16px; font-size:0.85rem; line-height:1.5;">
+            <strong style="color:var(--ruby-bright); text-transform:uppercase;">⚠️ Regras de Variante & Adaptação:</strong>
+            <p style="margin-top:4px; color:#f8fafc;">${cleanText(cls.regras_variante)}</p>
+          </div>
+        `;
+      }
+
+      // Descrição Geral
+      html += `
+        <div style="margin-bottom:18px; font-size:0.95rem; line-height:1.6; color:#e2e8f0; border-left:3px solid var(--ruby-primary); padding-left:12px;">
+          ${cleanText(cls.description || 'Classe canônica descrita nos compêndios de Tormenta 20.')}
+        </div>
+      `;
+
+      // Tabela de Progressão de Nível (1º ao 20º Nível)
+      const prog = cls.tabela_progressao || [];
+      if (prog.length > 0) {
+        html += `
+          <div style="margin-top:20px; margin-bottom:20px;">
+            <h4 style="font-family:var(--font-title); font-size:0.95rem; color:var(--ruby-bright); text-transform:uppercase; margin-bottom:10px; letter-spacing:0.5px; border-bottom:1px solid var(--ruby-border); padding-bottom:6px;">
+              ⚡ Progressão de Habilidades de Nível (1º ao 20º Nível)
+            </h4>
+            <div style="max-height:260px; overflow-y:auto; border:1px solid #1e293b; border-radius:6px;">
+              <table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left;">
+                <thead>
+                  <tr style="background:#090a10; color:#94a3b8; border-bottom:1px solid #2e344d; position:sticky; top:0; z-index:2;">
+                    <th style="padding:8px 10px; width:70px;">Nível</th>
+                    <th style="padding:8px 10px; width:180px;">Habilidade</th>
+                    <th style="padding:8px 10px;">Resumo Operacional</th>
+                  </tr>
+                </thead>
+                <tbody>
+        `;
+        prog.forEach((row, rIdx) => {
+          const bg = rIdx % 2 === 0 ? 'background:rgba(255,255,255,0.02);' : 'background:transparent;';
+          html += `
+            <tr style="${bg} border-bottom:1px solid rgba(255,255,255,0.05);">
+              <td style="padding:8px 10px; font-weight:700; color:var(--ruby-bright);">${cleanText(row.nivel)}</td>
+              <td style="padding:8px 10px; font-weight:600; color:#f8fafc;">${cleanText(row.habilidade)}</td>
+              <td style="padding:8px 10px; color:#cbd5e1;">${cleanText(row.resumo)}</td>
+            </tr>
+          `;
+        });
+        html += `
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      // Habilidades Detalhadas
+      const habs = cls.habilidades_detalhadas || [];
+      if (habs.length > 0) {
+        html += `
+          <div style="margin-top:20px; margin-bottom:20px;">
+            <h4 style="font-family:var(--font-title); font-size:0.95rem; color:var(--mana-cyan); text-transform:uppercase; margin-bottom:12px; letter-spacing:0.5px; border-bottom:1px solid #0369a1; padding-bottom:6px;">
+              📖 Descrição Completa das Habilidades (${habs.length})
+            </h4>
+            <div style="display:flex; flex-direction:column; gap:10px; max-height:340px; overflow-y:auto; padding-right:6px;">
+        `;
+        habs.forEach(h => {
+          html += `
+            <div style="background:#0c0d14; border:1px solid #1e293b; border-left:3px solid var(--ruby-primary); border-radius:6px; padding:10px 14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <strong style="color:#f8fafc; font-size:0.9rem;">${cleanText(h.nome)}</strong>
+                ${h.nivel ? `<span style="font-size:0.75rem; background:rgba(239,68,68,0.2); color:var(--ruby-bright); padding:2px 8px; border-radius:12px; font-weight:600;">${cleanText(h.nivel)}</span>` : ''}
+              </div>
+              <p style="color:#cbd5e1; font-size:0.85rem; line-height:1.5;">${cleanText(h.desc)}</p>
+            </div>
+          `;
+        });
+        html += `
+            </div>
+          </div>
+        `;
+      }
+
+      // Poderes Exclusivos da Classe
+      const classPowers = allPowers.filter(p => (p.classes && p.classes.map(cleanText).includes(cls.nome)) || cleanText(p.classe) === cls.nome);
+      if (classPowers.length > 0) {
+        html += `
+          <div style="margin-top:20px;">
+            <h4 style="font-family:var(--font-title); font-size:0.95rem; color:var(--gold-accent); text-transform:uppercase; margin-bottom:12px; letter-spacing:0.5px; border-bottom:1px solid #78350f; padding-bottom:6px;">
+              ⚔️ Poderes Exclusivos da Classe (${classPowers.length})
+            </h4>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px; max-height:200px; overflow-y:auto;">
+        `;
+        classPowers.forEach(cp => {
+          const cpName = cleanText(cp.nome || cp.file_name);
+          html += `
+            <div style="background:#12141f; border:1px solid #2e344d; border-radius:6px; padding:8px 10px; cursor:pointer;" onclick="closeModal(); setTimeout(() => openPowerModalByName('${cpName}'), 120)">
+              <div style="font-weight:700; color:#f8fafc; font-size:0.85rem; margin-bottom:3px;">${cpName}</div>
+              <p style="font-size:0.75rem; color:#94a3b8; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${cleanText(cp.description)}</p>
+            </div>
+          `;
+        });
+        html += `
+            </div>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      openModal(title, tags, html);
+    }
+
+    /* =========================================================
+       6. COMPÊNDIO DE PODERES (COM SUBFILTROS DINÂMICOS)
        ========================================================= */
     let allPowers = (window.T20_DATA && window.T20_DATA.powers) || [];
     let curPowerFilter = 'all';
+    let curPowerSubfilter = 'all';
+
+    function updatePowerSubfilters() {
+      const container = document.getElementById('powerSubfilterPills');
+      if (!container) return;
+
+      if (curPowerFilter === 'classe') {
+        container.style.display = 'flex';
+        const classesSet = new Set();
+        allPowers.forEach(p => {
+          if (p.classes && Array.isArray(p.classes)) {
+            p.classes.forEach(c => { if (c) classesSet.add(cleanText(c)); });
+          }
+          if (p.classe) classesSet.add(cleanText(p.classe));
+        });
+        const sortedClasses = Array.from(classesSet).sort((a,b) => a.localeCompare(b, 'pt-BR'));
+
+        let html = `<button class="pill ${curPowerSubfilter === 'all' ? 'active' : ''}" data-subfilter="all">⚔️ Todas as Classes</button>`;
+        sortedClasses.forEach(cls => {
+          const count = allPowers.filter(p => (p.classes && p.classes.map(cleanText).includes(cls)) || cleanText(p.classe) === cls).length;
+          html += `<button class="pill ${curPowerSubfilter === cls ? 'active' : ''}" data-subfilter="${cls}">${cls} (${count})</button>`;
+        });
+        container.innerHTML = html;
+      } else if (curPowerFilter === 'concedido') {
+        container.style.display = 'flex';
+        const deusesSet = new Set();
+        allPowers.forEach(p => {
+          if (p.deuses && Array.isArray(p.deuses)) {
+            p.deuses.forEach(d => { if (d) deusesSet.add(cleanText(d)); });
+          }
+        });
+        const sortedDeuses = Array.from(deusesSet).sort((a,b) => a.localeCompare(b, 'pt-BR'));
+
+        let html = `<button class="pill ${curPowerSubfilter === 'all' ? 'active' : ''}" data-subfilter="all">👑 Todos os Deuses</button>`;
+        sortedDeuses.forEach(d => {
+          const count = allPowers.filter(p => p.deuses && p.deuses.map(cleanText).includes(d)).length;
+          html += `<button class="pill ${curPowerSubfilter === d ? 'active' : ''}" data-subfilter="${d}">${d} (${count})</button>`;
+        });
+        container.innerHTML = html;
+      } else if (curPowerFilter === 'combate') {
+        container.style.display = 'flex';
+        const combatStyles = [
+          { id: 'all', label: '🥋 Todos de Combate' },
+          { id: 'Estilos de Combate', label: '⚔️ Estilos de Combate' },
+          { id: 'À Distância & Disparo', label: '🏹 À Distância & Disparo' },
+          { id: 'Defesa & Armadura', label: '🛡️ Defesa & Armadura' },
+          { id: 'Manobras & Táticas', label: '🥋 Manobras & Táticas' },
+          { id: 'Ataque & Dano', label: '💥 Ataque & Dano' },
+          { id: 'Montaria', label: '🐎 Montaria' },
+          { id: 'Geral & Proficiência', label: '📜 Geral' }
+        ];
+        let html = '';
+        combatStyles.forEach(st => {
+          const count = st.id === 'all'
+            ? allPowers.filter(p => (p.categoria === 'combate' || p.subtipo === 'poder-combate')).length
+            : allPowers.filter(p => (p.categoria === 'combate' || p.subtipo === 'poder-combate') && (p.subcategoria === st.id || p.subcategoria_combate === st.id)).length;
+          html += `<button class="pill ${curPowerSubfilter === st.id ? 'active' : ''}" data-subfilter="${st.id}">${st.label} (${count})</button>`;
+        });
+        container.innerHTML = html;
+      } else {
+        container.style.display = 'none';
+      }
+
+      container.querySelectorAll('.pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          playSound('click');
+          container.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          curPowerSubfilter = pill.getAttribute('data-subfilter');
+          renderPowers();
+        });
+      });
+    }
 
     function renderPowers() {
       const grid = document.getElementById('powersGrid');
@@ -2295,63 +2574,123 @@
       grid.innerHTML = '';
 
       const filtered = allPowers.filter(p => {
-        const matchesQuery = (p.nome || p.file_name || '').toLowerCase().includes(query) ||
-                             (p.description || '').toLowerCase().includes(query);
+        const pName = cleanText(p.nome || p.file_name || '').toLowerCase();
+        const pDesc = cleanText(p.description || '').toLowerCase();
+        const pCls = (p.classes || []).map(cleanText).join(' ').toLowerCase();
+        const pDeus = (p.deuses || []).map(cleanText).join(' ').toLowerCase();
+
+        const matchesQuery = pName.includes(query) || pDesc.includes(query) || pCls.includes(query) || pDeus.includes(query);
         if (!matchesQuery) return false;
-        if (curPowerFilter === 'all') return true;
-        const cat = (p.categoria || p.subtipo || p.path || '').toLowerCase();
-        return cat.includes(curPowerFilter);
-      }).slice(0, 75);
+
+        if (curPowerFilter !== 'all') {
+          const cat = (p.categoria || p.subtipo || '').toLowerCase();
+          const matchesCat = cat.includes(curPowerFilter);
+          if (!matchesCat) return false;
+        }
+
+        if (curPowerSubfilter !== 'all') {
+          if (curPowerFilter === 'classe') {
+            const inCls = (p.classes && p.classes.map(cleanText).includes(curPowerSubfilter)) || cleanText(p.classe) === curPowerSubfilter;
+            if (!inCls) return false;
+          } else if (curPowerFilter === 'concedido') {
+            const inDeus = p.deuses && p.deuses.map(cleanText).includes(curPowerSubfilter);
+            if (!inDeus) return false;
+          } else if (curPowerFilter === 'combate') {
+            const matchComb = (p.subcategoria === curPowerSubfilter) || (p.subcategoria_combate === curPowerSubfilter);
+            if (!matchComb) return false;
+          }
+        }
+
+        return true;
+      }).slice(0, 80);
 
       filtered.forEach(p => {
         const card = document.createElement('div');
         card.className = 'rpg-card';
-        const tag = p.trilha_poder || p.categoria || p.subtipo || 'Poder';
-        const nivel = p.requer_nivel ? `Nível ${p.requer_nivel}` : 'Sem Nível';
-        
+        const cat = p.categoria || p.subtipo || 'geral';
+        const powerTitle = cleanText(p.nome || p.file_name);
+
+        let subcatBadge = '';
+        if (p.subcategoria_combate) subcatBadge = ` • ${cleanText(p.subcategoria_combate)}`;
+        else if (p.classes && p.classes.length) subcatBadge = ` • ${cleanText(p.classes[0])}`;
+        else if (p.deuses && p.deuses.length) subcatBadge = ` • ${cleanText(p.deuses[0])}`;
+
         card.innerHTML = `
           <div class="rpg-card-header">
-            <h3>${p.nome || p.file_name}</h3>
-            <span class="rpg-badge combate">${tag}</span>
+            <h3>⚡ ${powerTitle}</h3>
+            <span class="rpg-badge ${cat}">${cat.toUpperCase()}${subcatBadge}</span>
           </div>
-          <p class="rpg-card-desc">${p.description || p.resumo || 'Poder modular oficial de Tormenta 20.'}</p>
+          <p class="rpg-card-desc">${cleanText(p.description || 'Poder canônico de Tormenta 20.')}</p>
           <div class="rpg-card-footer">
-            <span>🔑 ${p.requer_poder && p.requer_poder.length ? p.requer_poder.join(', ') : 'Livre'}</span>
-            <span>🎖️ ${nivel}</span>
+            <span>${p.requer_poder && p.requer_poder.length ? 'Pré-req: ' + p.requer_poder.map(cleanText).join(', ') : 'Sem pré-requisitos'}</span>
+            <span style="color:var(--ruby-bright); font-weight:700;">Detalhes ➜</span>
           </div>
         `;
-        card.onclick = () => openModal(p.nome || p.file_name, [
-          `Categoria: ${p.categoria || 'Geral'}`,
-          `Trilha: ${tag}`,
-          `Nível Mínimo: ${nivel}`,
-          `Fonte: ${p.fonte || 'Tormenta20 JdA'}`
-        ], `
-          <p><strong>Descrição:</strong> ${p.description || p.resumo || 'Sem descrição cadastrada.'}</p>
-          ${p.requer_poder && p.requer_poder.length ? `<p style="margin-top:10px;"><strong>Pré-requisitos:</strong> ${p.requer_poder.join(', ')}</p>` : ''}
-          ${p.deuses && p.deuses.length ? `<p style="margin-top:10px;"><strong>Divindades:</strong> ${p.deuses.join(', ')}</p>` : ''}
-          ${p.classes && p.classes.length ? `<p style="margin-top:10px;"><strong>Classes:</strong> ${p.classes.join(', ')}</p>` : ''}
-          ${p.magias_relacionadas && p.magias_relacionadas.length ? `<p style="margin-top:10px;"><strong>Magias Vinculadas:</strong> ${p.magias_relacionadas.join(', ')}</p>` : ''}
-        `);
+
+        card.onclick = () => openPowerModal(p);
         grid.appendChild(card);
       });
     }
 
+    function openPowerModal(p) {
+      playSound('click');
+      const cat = p.categoria || p.subtipo || 'geral';
+      const powerTitle = cleanText(p.nome || p.file_name);
+      const tags = [cat.toUpperCase()];
+      if (p.subcategoria_combate) tags.push(cleanText(p.subcategoria_combate));
+      if (p.fonte) tags.push(cleanText(p.fonte));
+
+      let bodyHtml = `
+        <div style="font-size:0.95rem; line-height:1.6; margin-bottom:14px; color:#e2e8f0; border-left:3px solid var(--ruby-primary); padding-left:12px;">
+          ${cleanText(p.description || p.resumo || 'Sem descrição cadastrada.')}
+        </div>
+      `;
+
+      if (p.requer_poder && p.requer_poder.length) {
+        bodyHtml += `<p style="margin-top:10px;"><strong>Pré-requisitos:</strong> ${p.requer_poder.map(cleanText).join(', ')}</p>`;
+      }
+      if (p.deuses && p.deuses.length) {
+        bodyHtml += `<p style="margin-top:10px;"><strong>Divindades Concessoras:</strong> ${p.deuses.map(cleanText).join(', ')}</p>`;
+      }
+      if (p.classes && p.classes.length) {
+        const classChips = p.classes.map(c => {
+          const cName = cleanText(c);
+          return `<button type="button" class="dialog-tag" style="cursor:pointer; background:#1e293b; color:#38bdf8; border:1px solid #0284c7; padding:2px 8px; border-radius:4px; font-size:0.8rem;" onclick="closeModal(); setTimeout(() => openClassDossier('${cName}'), 120);">${cName} ➜</button>`;
+        }).join(' ');
+        bodyHtml += `<div style="margin-top:12px;"><strong>Classes Vinculadas (clique para ver dossiê):</strong><div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">${classChips}</div></div>`;
+      }
+      if (p.magias_relacionadas && p.magias_relacionadas.length) {
+        bodyHtml += `<p style="margin-top:10px;"><strong>Magias Vinculadas:</strong> ${p.magias_relacionadas.map(cleanText).join(', ')}</p>`;
+      }
+
+      openModal(powerTitle, tags, bodyHtml);
+    }
+
+    function openPowerModalByName(name) {
+      const p = allPowers.find(pow => cleanText(pow.nome || pow.file_name).toLowerCase() === cleanText(name).toLowerCase());
+      if (p) openPowerModal(p);
+      else showToast("Poder não encontrado", `Poder "${name}" não localizado.`);
+    }
+
     document.getElementById('powerSearch').addEventListener('input', renderPowers);
     document.querySelectorAll('#powerFilterPills .pill').forEach(pill => {
-      pill.addEventListener('click', (e) => {
+      pill.addEventListener('click', () => {
         playSound('click');
         document.querySelectorAll('#powerFilterPills .pill').forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
         curPowerFilter = pill.getAttribute('data-filter');
+        curPowerSubfilter = 'all';
+        updatePowerSubfilters();
         renderPowers();
       });
     });
 
     /* =========================================================
-       7. GRIMÓRIO DE MAGIAS
+       7. GRIMÓRIO DE MAGIAS (APRIMORAMENTOS & TESTE DE USURPAR)
        ========================================================= */
     let allSpells = (window.T20_DATA && window.T20_DATA.spells) || [];
     let curSpellCircle = 'all';
+    let currentInspectedSpell = null;
 
     function renderSpells() {
       const grid = document.getElementById('spellsGrid');
@@ -2359,61 +2698,230 @@
       grid.innerHTML = '';
 
       const filtered = allSpells.filter(sp => {
-        const matchesQuery = (sp.nome || sp.file_name || '').toLowerCase().includes(query) ||
-                             (sp.description || '').toLowerCase().includes(query) ||
-                             (sp.escola || '').toLowerCase().includes(query);
+        const sName = cleanText(sp.nome || sp.file_name || '').toLowerCase();
+        const sDesc = cleanText(sp.description || '').toLowerCase();
+        const sEsc = cleanText(sp.escola || '').toLowerCase();
+
+        const matchesQuery = sName.includes(query) || sDesc.includes(query) || sEsc.includes(query);
         if (!matchesQuery) return false;
         if (curSpellCircle === 'all') return true;
         return String(sp.circulo) === String(curSpellCircle);
-      }).slice(0, 75);
+      }).slice(0, 80);
 
       filtered.forEach(sp => {
         const card = document.createElement('div');
         card.className = 'rpg-card';
-        const custo = sp.custo_pm ? `${sp.custo_pm} PM` : '1 PM';
+        const custo = sp.custo_pm ? `${sp.custo_pm} PM` : (sp.circulo === 1 ? '1 PM' : `${sp.circulo * 3 - 3} PM`);
+        const spellName = cleanText(sp.nome || sp.file_name);
+        const aprCount = (sp.aprimoramentos || []).length;
 
         card.innerHTML = `
           <div class="rpg-card-header">
-            <h3>🔮 ${sp.nome || sp.file_name}</h3>
-            <span class="rpg-badge magia">${sp.circulo || 1}º Círculo • ${sp.escola || 'Geral'}</span>
+            <h3>🔮 ${spellName}</h3>
+            <span class="rpg-badge magia">${sp.circulo || 1}º Círculo • ${cleanText(sp.escola || 'Geral')}</span>
           </div>
-          <p class="rpg-card-desc">${sp.description || 'Magia de ' + (sp.escola || 'Arton') + '.'}</p>
+          <p class="rpg-card-desc">${cleanText(sp.description || 'Magia de ' + (sp.escola || 'Arton') + '.')}</p>
           <div class="rpg-card-footer">
-            <span>⚡ ${sp.execucao || 'Padrão'} • ${sp.alcance || 'Curto'}</span>
+            <span>⚡ ${cleanText(sp.execucao || 'Padrão')} • ${aprCount ? `+${aprCount} apr.` : 'Toque'}</span>
             <span style="color:var(--mana-cyan); font-weight:700;">💧 ${custo}</span>
           </div>
         `;
-        card.onclick = () => openModal(sp.nome || sp.file_name, [
-          `Escola: ${sp.escola || 'Geral'}`,
-          `Círculo: ${sp.circulo || 1}º Círculo`,
-          `Custo: ${custo}`
-        ], `
-          <p><strong>Execução:</strong> ${sp.execucao || 'Padrão'}</p>
-          <p><strong>Alcance:</strong> ${sp.alcance || 'Pessoal'}</p>
-          <p><strong>Duração:</strong> ${sp.duracao || 'Cena'}</p>
-          <p><strong>Resistência:</strong> ${sp.resistencia || 'Nenhuma'}</p>
-          <p style="margin-top:12px;"><strong>Efeito:</strong> ${sp.description || 'Descrição completa nos tomos arcanos.'}</p>
-          <div style="margin-top:16px;">
-            <button class="btn-roll-atk" style="background:var(--mana-dark); border-color:var(--mana-cyan);" onclick="castCompendiumSpell('${sp.nome || sp.file_name}', ${sp.custo_pm || 1})">
-              ✨ Lançar Magia (-${sp.custo_pm || 1} PM)
-            </button>
-          </div>
-        `);
+        card.onclick = () => openSpellModal(sp);
         grid.appendChild(card);
       });
     }
 
-    function castCompendiumSpell(name, cost) {
+    function openSpellModal(sp) {
+      currentInspectedSpell = sp;
+      playSound('click');
+
       const c = characters[currentCharacterIndex];
-      if (c.pm_atual < cost) {
-        showToast("Mana Insuficiente!", `Necessário ${cost} PM.`);
+      const isKhinlannas = c && (c.id === 'khinlannas' || (c.nome && c.nome.includes('Khinlannas')) || (c.classe && c.classe.includes('Usurpador')));
+      const baseCost = sp.custo_pm || (sp.circulo === 1 ? 1 : sp.circulo === 2 ? 3 : sp.circulo === 3 ? 6 : sp.circulo === 4 ? 10 : 15);
+      const spellTitle = `🔮 ${cleanText(sp.nome || sp.file_name)}`;
+
+      const tags = [
+        `Escola: ${cleanText(sp.escola || 'Universal')}`,
+        `${sp.circulo || 1}º Círculo`,
+        `Custo Base: ${baseCost} PM`,
+        `Execução: ${cleanText(sp.execucao || 'Padrão')}`
+      ];
+
+      let html = `
+        <div class="spell-modal-content">
+          <!-- STATS MECÂNICOS -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-bottom:14px; background:rgba(0,0,0,0.35); padding:10px 12px; border-radius:8px; border:1px solid #2e344d;">
+            <div><span style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase;">Alcance:</span><br><strong>${cleanText(sp.alcance || 'Pessoal')}</strong></div>
+            <div><span style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase;">Alvo/Área:</span><br><strong>${cleanText(sp.alvo || sp.area || sp.efeito || '1 criatura')}</strong></div>
+            <div><span style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase;">Duração:</span><br><strong>${cleanText(sp.duracao || 'Cena')}</strong></div>
+            <div><span style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase;">Resistência:</span><br><strong>${cleanText(sp.resistencia || 'Nenhuma')}</strong></div>
+          </div>
+
+          <div style="font-size:0.95rem; line-height:1.6; margin-bottom:16px; color:#e2e8f0; border-left:3px solid var(--mana-cyan); padding-left:12px;">
+            ${cleanText(sp.description || 'Descrição da magia nos tomos canônicos de Arton.')}
+          </div>
+      `;
+
+      // Aprimoramentos Canônicos e Devoção
+      const aprimoramentos = sp.aprimoramentos || [];
+      if (aprimoramentos.length > 0) {
+        html += `
+          <div class="spell-aprimoramentos-box" style="margin-top:16px; background:#0d111a; border:1px solid #1e293b; border-radius:8px; padding:12px;">
+            <h4 style="font-family:var(--font-title); font-size:0.85rem; color:var(--mana-cyan); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">
+              ⚡ Aprimoramentos Canônicos & Devoção (${aprimoramentos.length})
+            </h4>
+            <div style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto; padding-right:4px;">
+        `;
+
+        aprimoramentos.forEach((apr, idx) => {
+          const deusTag = apr.deus ? `<span style="background:var(--ruby-dark); color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-right:4px;">${cleanText(apr.deus)}</span>` : '';
+          html += `
+            <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; font-size:0.85rem; background:rgba(255,255,255,0.02); padding:6px 8px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
+              <input type="checkbox" class="spell-apr-checkbox" id="spell_apr_${idx}" data-cost="${apr.custo_num || 0}" onchange="recalculateSpellCost(${baseCost})" style="margin-top:3px; accent-color:var(--ruby-primary);">
+              <div>
+                <span style="color:var(--mana-cyan); font-weight:700;">${cleanText(apr.custo_str || '+1 PM')}</span>
+                ${deusTag}
+                <span style="color:#cbd5e1;">${cleanText(apr.desc)}</span>
+              </div>
+            </label>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+      }
+
+      // Painel de Custo e Usurpar / Lançar
+      html += `
+        <div class="spell-cast-panel" style="margin-top:16px; padding:14px; background:rgba(20, 10, 15, 0.6); border:1px solid var(--ruby-border); border-radius:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Custo Total em Mana:</span>
+              <div id="spellTotalCostDisplay" style="font-size:1.4rem; font-weight:800; color:var(--mana-cyan); font-family:var(--font-title);">
+                ${baseCost} PM
+              </div>
+            </div>
+            <div id="usurparCdDisplayWrap" style="${isKhinlannas ? '' : 'display:none;'} text-align:right;">
+              <span style="font-size:0.8rem; color:var(--ruby-bright); text-transform:uppercase;">Dificuldade Usurpar (CD):</span>
+              <div id="spellUsurpCdDisplay" style="font-size:1.4rem; font-weight:800; color:var(--ruby-bright); font-family:var(--font-title);">
+                CD ${15 + baseCost}
+              </div>
+              <span style="font-size:0.75rem; color:#94a3b8;">Bônus: Enganação +13</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      `;
+
+      if (isKhinlannas) {
+        html += `
+          <button type="button" id="btnUsurparAction" class="btn-roll-atk" style="flex:2; background:linear-gradient(135deg, #991b1b 0%, #450a0a 100%); border:1px solid var(--ruby-primary); color:#fff; font-size:0.95rem; font-weight:700; padding:12px; box-shadow:0 0 12px rgba(239, 68, 68, 0.4);" onclick="performSpellUsurpation('${cleanText(sp.nome || sp.file_name)}')">
+            🔮 Usurpar Magia (Enganação +13 vs <span id="btnCdLabel">CD ${15 + baseCost}</span>)
+          </button>
+          <button type="button" class="btn-roll-atk" style="flex:1; background:#1e293b; border-color:#475569; color:#cbd5e1; font-size:0.85rem;" onclick="performNormalSpellCast('${cleanText(sp.nome || sp.file_name)}')">
+            ✨ Lançar Direto
+          </button>
+        `;
+      } else {
+        html += `
+          <button type="button" class="btn-roll-atk" style="flex:1; background:var(--mana-dark); border-color:var(--mana-cyan); color:#fff; font-size:0.95rem;" onclick="performNormalSpellCast('${cleanText(sp.nome || sp.file_name)}')">
+            ✨ Lançar Magia (<span id="btnCastCostLabel">-${baseCost} PM</span>)
+          </button>
+        `;
+      }
+
+      html += `
+          </div>
+        </div>
+      </div>`;
+
+      openModal(spellTitle, tags, html);
+    }
+
+    function getCalculatedSpellCost(baseCost) {
+      let total = baseCost;
+      const checkboxes = document.querySelectorAll('.spell-apr-checkbox:checked');
+      checkboxes.forEach(cb => {
+        total += parseInt(cb.getAttribute('data-cost') || '0', 10);
+      });
+      return total;
+    }
+
+    function recalculateSpellCost(baseCost) {
+      const total = getCalculatedSpellCost(baseCost);
+      const cd = 15 + total;
+
+      const displayCost = document.getElementById('spellTotalCostDisplay');
+      if (displayCost) displayCost.textContent = `${total} PM`;
+
+      const displayCd = document.getElementById('spellUsurpCdDisplay');
+      if (displayCd) displayCd.textContent = `CD ${cd}`;
+
+      const btnCdLabel = document.getElementById('btnCdLabel');
+      if (btnCdLabel) btnCdLabel.textContent = `CD ${cd}`;
+
+      const btnCastCostLabel = document.getElementById('btnCastCostLabel');
+      if (btnCastCostLabel) btnCastCostLabel.textContent = `-${total} PM`;
+    }
+
+    function performSpellUsurpation(spellName) {
+      const c = characters[currentCharacterIndex];
+      const baseCost = currentInspectedSpell ? (currentInspectedSpell.custo_pm || 1) : 1;
+      const totalCost = getCalculatedSpellCost(baseCost);
+      const cd = 15 + totalCost;
+
+      if (c.pm_atual < totalCost) {
+        showToast("Mana Insuficiente!", `Necessário ${totalCost} PM para usurpar ${spellName}. (PM atual: ${c.pm_atual})`);
+        return;
+      }
+
+      // Regra canônica do Usurpador: PM é consumido mesmo em caso de falha!
+      c.pm_atual -= totalCost;
+      updateResourceUI();
+
+      // Teste de Enganação (Khinlannas bônus +13)
+      const d20 = Math.floor(Math.random() * 20) + 1;
+      const modEnganacao = 13;
+      const totalCheck = d20 + modEnganacao;
+      const isNat20 = (d20 === 20);
+      const isNat1 = (d20 === 1);
+      const success = isNat20 || (!isNat1 && totalCheck >= cd);
+
+      closeModal();
+
+      if (success) {
+        playSound('spell');
+        const critTag = isNat20 ? " 🌟 20 NATURAL! SUCESSO CRÍTICO!" : "";
+        showToast(
+          `🔮 Usurpação BEM-SUCEDIDA!${critTag}`,
+          `🎲 d20 (${d20}) + 13 = ${totalCheck} vs CD ${cd}. ${spellName} lançada com maestria! (-${totalCost} PM | PM Restante: ${c.pm_atual})`
+        );
+      } else {
+        playSound('click');
+        const nat1Tag = isNat1 ? " 💀 1 NATURAL! DESASTRE!" : "";
+        showToast(
+          `❌ Falha na Usurpação!${nat1Tag}`,
+          `🎲 d20 (${d20}) + 13 = ${totalCheck} vs CD ${cd}. O poder divino escapou! A magia falhou, mas ${totalCost} PM foram gastos. (PM Restante: ${c.pm_atual})`
+        );
+      }
+    }
+
+    function performNormalSpellCast(spellName) {
+      const c = characters[currentCharacterIndex];
+      const baseCost = currentInspectedSpell ? (currentInspectedSpell.custo_pm || 1) : 1;
+      const totalCost = getCalculatedSpellCost(baseCost);
+
+      if (c.pm_atual < totalCost) {
+        showToast("Mana Insuficiente!", `Necessário ${totalCost} PM.`);
         return;
       }
       playSound('spell');
-      c.pm_atual -= cost;
+      c.pm_atual -= totalCost;
       updateResourceUI();
       closeModal();
-      showToast(`Magia Lançada: ${name}`, `-${cost} PM`, `PM Restante: ${c.pm_atual}`);
+      showToast(`Magia Lançada: ${spellName}`, `-${totalCost} PM`, `PM Restante: ${c.pm_atual}`);
     }
 
     document.getElementById('spellSearch').addEventListener('input', renderSpells);
@@ -2452,26 +2960,28 @@
         card.className = 'rpg-card';
         const preco = it.preco_ts ? `T$ ${it.preco_ts}` : 'Preço Especial';
         const esp = it.espacos ? `${it.espacos} Espaço(s)` : '0 Espaços';
-        const sub = it.subtipo || 'Item';
+        const sub = cleanText(it.subtipo || 'Item');
+        const itemName = cleanText(it.nome || it.file_name);
+        const itemDesc = cleanText(it.description || it.resumo || 'Item catalogado do acervo de Arton.');
 
         card.innerHTML = `
           <div class="rpg-card-header">
-            <h3>${it.nome || it.file_name}</h3>
+            <h3>${itemName}</h3>
             <span class="rpg-badge concedido">${sub}</span>
           </div>
-          <p class="rpg-card-desc">${it.description || it.resumo || 'Item catalogado do acervo de Arton.'}</p>
+          <p class="rpg-card-desc">${itemDesc}</p>
           <div class="rpg-card-footer">
             <span>💰 ${preco}</span>
             <span>⚖️ ${esp}</span>
           </div>
         `;
-        card.onclick = () => openModal(it.nome || it.file_name, [
+        card.onclick = () => openModal(itemName, [
           `Preço: ${preco}`,
           `Espaços: ${esp}`,
           `Subtipo: ${sub}`
         ], `
-          <p><strong>Descrição:</strong> ${it.description || it.resumo || 'Item catalogado.'}</p>
-          ${it.dano ? `<p style="margin-top:8px;"><strong>Dano:</strong> ${it.dano} | <strong>Crítico:</strong> ${it.critico || 'x2'}</p>` : ''}
+          <p><strong>Descrição:</strong> ${itemDesc}</p>
+          ${it.dano ? `<p style="margin-top:8px;"><strong>Dano:</strong> ${cleanText(it.dano)} | <strong>Crítico:</strong> ${cleanText(it.critico || 'x2')}</p>` : ''}
           ${it.bonus_defesa ? `<p style="margin-top:8px;"><strong>Defesa:</strong> +${it.bonus_defesa}</p>` : ''}
           ${it.penalidade_armadura ? `<p style="margin-top:8px;"><strong>Penalidade:</strong> ${it.penalidade_armadura}</p>` : ''}
         `);
@@ -2521,23 +3031,24 @@
         const card = document.createElement('div');
         card.className = 'rpg-card';
         const isPericia = r.rule_kind === 'pericia';
-        const title = r.nome || r.name;
-        const tag = isPericia ? `Perícia (${r.atributo_chave || 'Geral'})` : 'Condição';
+        const title = cleanText(r.nome || r.name);
+        const tag = isPericia ? `Perícia (${cleanText(r.atributo_chave || 'Geral')})` : 'Condição';
         const badgeClass = isPericia ? 'classe' : 'tormenta';
+        const ruleDesc = cleanText(r.description || 'Regra canônica do sistema.');
 
         card.innerHTML = `
           <div class="rpg-card-header">
             <h3>${isPericia ? '🎯' : '⚠️'} ${title}</h3>
             <span class="rpg-badge ${badgeClass}">${tag}</span>
           </div>
-          <p class="rpg-card-desc">${r.description || 'Regra canônica do sistema.'}</p>
+          <p class="rpg-card-desc">${ruleDesc}</p>
           <div class="rpg-card-footer">
             <span>${isPericia ? (r.somente_treinada ? '🔒 Somente Treinada' : '🔓 Livre') : 'Estado Mecânico'}</span>
             <span>Inspecionar ➜</span>
           </div>
         `;
 
-        card.onclick = () => openModal(title, [tag], `<p>${r.description}</p>`);
+        card.onclick = () => openModal(title, [tag], `<p>${ruleDesc}</p>`);
         grid.appendChild(card);
       });
     }
