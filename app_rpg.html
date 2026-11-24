@@ -1453,6 +1453,29 @@
     .rpg-badge.concedido { background: rgba(245, 158, 11, 0.15); border-color: var(--gold-accent); color: #fde68a; }
     .rpg-badge.tormenta { background: rgba(168, 85, 247, 0.15); border-color: var(--purple-usurp); color: #e9d5ff; }
     .rpg-badge.classe { background: rgba(16, 185, 129, 0.15); border-color: var(--emerald); color: #a7f3d0; }
+    .rpg-badge.arma { background: rgba(239, 68, 68, 0.15); border-color: var(--ruby-primary); color: #fca5a5; }
+    .rpg-badge.armadura { background: rgba(99, 102, 241, 0.15); border-color: #818cf8; color: #c7d2fe; }
+    .rpg-badge.alquimia { background: rgba(16, 185, 129, 0.15); border-color: var(--emerald); color: #a7f3d0; }
+    .rpg-badge.sagrado { background: rgba(245, 158, 11, 0.15); border-color: var(--gold-accent); color: #fde68a; }
+    .rpg-badge.magico { background: rgba(56, 189, 248, 0.15); border-color: var(--mana-cyan); color: #bae6fd; }
+    .rpg-badge.melhoria { background: rgba(234, 88, 12, 0.15); border-color: #fb923c; color: #fed7aa; }
+    .rpg-badge.vestuario { background: rgba(244, 63, 94, 0.15); border-color: #fb7185; color: #fecdd3; }
+    .rpg-badge.aventura { background: rgba(148, 163, 184, 0.15); border-color: #94a3b8; color: #e2e8f0; }
+    .rpg-badge.subtipo { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); color: #cbd5e1; font-weight: 600; font-size: 0.65rem; }
+    .item-stats-preview {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin: 4px 0 6px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 3px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
 
     .rpg-card-desc {
       font-size: 0.8rem;
@@ -2029,13 +2052,20 @@
           <input type="search" id="itemSearch" placeholder="Buscar armas, armaduras, vestuário, itens sagrados, poções..." aria-label="Buscar itens">
         </div>
         <div class="filter-pills-row" id="itemFilterPills">
-          <button class="pill active" data-filter="all">Todos (633)</button>
-          <button class="pill" data-filter="arma">Armas & Munições</button>
-          <button class="pill" data-filter="armadura">Armaduras & Escudos</button>
-          <button class="pill" data-filter="vestuario">Vestuário & Acessórios</button>
-          <button class="pill" data-filter="sagrado">Itens Sagrados</button>
-          <button class="pill" data-filter="alquimia">Alquimia & Poções</button>
-          <button class="pill" data-filter="aventura">Aventura & Ferramentas</button>
+          <button class="pill active" data-filter="all">Todos (635)</button>
+          <button class="pill" data-filter="arma">⚔️ Armas & Munições (120)</button>
+          <button class="pill" data-filter="armadura">🛡️ Armaduras & Escudos (41)</button>
+          <button class="pill" data-filter="sagrado">📿 Itens Sagrados (47)</button>
+          <button class="pill" data-filter="alquimia">🧪 Alquimia & Poções (71)</button>
+          <button class="pill" data-filter="magico">✨ Mágicos & Esotéricos (84)</button>
+          <button class="pill" data-filter="vestuario">🧣 Vestuário (52)</button>
+          <button class="pill" data-filter="aventura">🎒 Aventura & Ferramentas (187)</button>
+          <button class="pill" data-filter="melhoria">⚙️ Melhorias & Materiais (33)</button>
+        </div>
+
+        <!-- Barra de Subfiltros Dinâmicos de Itens -->
+        <div class="filter-pills-row subfilter-bar" id="itemSubfilterPills" style="display: none;">
+          <!-- Povoado dinamicamente com subfiltros de cada categoria -->
         </div>
       </div>
 
@@ -3819,8 +3849,153 @@
     /* =========================================================
        8. INVENTÁRIO & ITENS (COMPÊNDIO GERAL)
        ========================================================= */
+    /* =========================================================
+       8. INVENTÁRIO & ITENS (COMPÊNDIO GERAL)
+       ========================================================= */
     let allItems = (window.T20_DATA && window.T20_DATA.items) || [];
     let curItemFilter = 'all';
+    let curItemSubfilter = 'all';
+
+    function getItemCategory(it) {
+      const sub = (it.subtipo || '').toLowerCase();
+      const path = (it.path || '').toLowerCase();
+      if (sub.includes('armadura') || sub.includes('escudo') || path.includes('/armaduras') || path.includes('/escudos')) return 'armadura';
+      if (sub.includes('arma-') || sub === 'arma' || sub.includes('municao') || path.includes('/armas') || path.includes('/munições')) return 'arma';
+      if (sub.includes('sagrado') || path.includes('/itens sagrados')) return 'sagrado';
+      if (sub.includes('alquimia') || sub.includes('veneno') || sub.includes('catalisador') || path.includes('/alquimia') || path.includes('/venenos')) return 'alquimia';
+      if (sub.includes('magico') || sub.includes('esoterico') || sub.includes('artefato') || sub.includes('encantamento') || path.includes('/esotéricos') || path.includes('/itens mágicos') || path.includes('/artefatos') || path.includes('/encantamentos')) return 'magico';
+      if (sub === 'vestuario' && path.includes('vestuário')) return 'vestuario';
+      if (sub.includes('material') || sub.includes('modificacao') || path.includes('modificações')) return 'melhoria';
+      return 'aventura';
+    }
+
+    function formatSubtypeLabel(sub, it) {
+      if (!sub) return 'Item de Arton';
+      const map = {
+        'arma-simples': 'Arma Simples',
+        'arma-marcial': 'Arma Marcial',
+        'arma-exotica': 'Arma Exótica',
+        'arma-de-fogo': 'Arma de Fogo',
+        'municao': 'Munição',
+        'armadura-leve': 'Armadura Leve',
+        'armadura-pesada': 'Armadura Pesada',
+        'escudo': 'Escudo',
+        'item-sagrado': 'Item Sagrado',
+        'prato-sagrado': 'Prato Sagrado',
+        'alquimia': 'Alquimia',
+        'veneno': 'Veneno',
+        'catalisador': 'Catalisador',
+        'esoterico': 'Esotérico Arcano',
+        'acessorio-magico': 'Acessório Mágico',
+        'artefato-divino': 'Artefato Divino',
+        'artefato': 'Artefato',
+        'encantamento-magico': 'Encantamento',
+        'vestuario': 'Vestuário',
+        'equipamento-aventura': 'Aventura',
+        'ferramenta': 'Ferramenta de Ofício',
+        'veiculo-montaria': 'Veículo / Montaria',
+        'montaria': 'Montaria',
+        'veiculo': 'Veículo',
+        'alimento': 'Alimento & Refeição',
+        'aparato': 'Aparato Tecnológico',
+        'material-especial': 'Material Especial',
+        'modificacao-superior': 'Modificação Superior',
+        'comparativo': 'Guia Comparativo'
+      };
+      return map[sub] || cleanText(sub);
+    }
+
+    const ITEM_SUBFILTERS = {
+      arma: [
+        { id: 'all', label: '⚔️ Todas as Armas & Munições' },
+        { id: 'arma-simples', label: 'Armas Simples' },
+        { id: 'arma-marcial', label: 'Armas Marciais' },
+        { id: 'arma-exotica', label: 'Armas Exóticas' },
+        { id: 'arma-de-fogo', label: 'Armas de Fogo' },
+        { id: 'municao', label: 'Munições' }
+      ],
+      armadura: [
+        { id: 'all', label: '🛡️ Todas as Proteções' },
+        { id: 'armadura-leve', label: 'Armaduras Leves' },
+        { id: 'armadura-pesada', label: 'Armaduras Pesadas' },
+        { id: 'escudo', label: 'Escudos' }
+      ],
+      sagrado: [
+        { id: 'all', label: '📿 Todos os Sagrados' },
+        { id: 'item-sagrado', label: 'Símbolos & Litúrgicos' },
+        { id: 'prato-sagrado', label: 'Pratos Sagrados dos Deuses' }
+      ],
+      alquimia: [
+        { id: 'all', label: '🧪 Todos os Alquímicos' },
+        { id: 'alquimia', label: 'Poções & Preparados' },
+        { id: 'veneno', label: 'Venenos & Toxinas' },
+        { id: 'catalisador', label: 'Catalisadores' }
+      ],
+      magico: [
+        { id: 'all', label: '✨ Todos os Mágicos' },
+        { id: 'acessorio-magico', label: 'Acessórios Mágicos' },
+        { id: 'esoterico', label: 'Esotéricos Arcanos' },
+        { id: 'artefato', label: 'Artefatos Divinos' },
+        { id: 'encantamento-magico', label: 'Encantamentos' }
+      ],
+      vestuario: [
+        { id: 'all', label: '🧣 Todo o Vestuário' },
+        { id: 'vestuario', label: 'Trajes & Roupas' }
+      ],
+      aventura: [
+        { id: 'all', label: '🎒 Todos de Aventura' },
+        { id: 'equipamento-aventura', label: 'Equipamento Geral' },
+        { id: 'ferramenta', label: 'Ferramentas de Ofício' },
+        { id: 'veiculo', label: 'Veículos & Montarias' },
+        { id: 'alimento', label: 'Alimentos & Hospedagem' },
+        { id: 'aparato', label: 'Aparatos Tecnológicos' }
+      ],
+      melhoria: [
+        { id: 'all', label: '⚙️ Todas as Melhorias' },
+        { id: 'modificacao-superior', label: 'Modificações Superiores' },
+        { id: 'material-especial', label: 'Materiais Especiais' }
+      ]
+    };
+
+    function updateItemSubfilters() {
+      const container = document.getElementById('itemSubfilterPills');
+      if (!container) return;
+
+      if (curItemFilter !== 'all' && ITEM_SUBFILTERS[curItemFilter]) {
+        container.style.display = 'flex';
+        const subList = ITEM_SUBFILTERS[curItemFilter];
+        let html = '';
+        subList.forEach(st => {
+          let count = 0;
+          if (st.id === 'all') {
+            count = allItems.filter(it => getItemCategory(it) === curItemFilter).length;
+          } else {
+            count = allItems.filter(it => {
+              if (getItemCategory(it) !== curItemFilter) return false;
+              const sub = (it.subtipo || '').toLowerCase();
+              const p = (it.path || '').toLowerCase();
+              if (st.id === 'artefato') return sub.includes('artefato') || p.includes('artefatos');
+              if (st.id === 'veiculo') return sub.includes('veiculo') || sub.includes('montaria') || p.includes('veículos');
+              return sub === st.id;
+            }).length;
+          }
+          html += `<button class="pill ${curItemSubfilter === st.id ? 'active' : ''}" data-subfilter="${st.id}">${st.label} (${count})</button>`;
+        });
+        container.innerHTML = html;
+
+        container.querySelectorAll('.pill').forEach(pill => {
+          pill.addEventListener('click', () => {
+            playSound('click');
+            container.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            curItemSubfilter = pill.getAttribute('data-subfilter');
+            renderItems();
+          });
+        });
+      } else {
+        container.style.display = 'none';
+      }
+    }
 
     function renderItems() {
       const grid = document.getElementById('itemsGrid');
@@ -3829,45 +4004,131 @@
 
       const filtered = allItems.filter(item => {
         const matchesQuery = (item.nome || item.file_name || '').toLowerCase().includes(query) ||
-                             (item.path || '').toLowerCase().includes(query);
+                             (item.path || '').toLowerCase().includes(query) ||
+                             (item.subtipo || '').toLowerCase().includes(query);
         if (!matchesQuery) return false;
-        if (curItemFilter === 'all') return true;
-        const sub = (item.subtipo || item.path || '').toLowerCase();
-        return sub.includes(curItemFilter);
-      }).slice(0, 75);
+
+        const cat = getItemCategory(item);
+        if (curItemFilter !== 'all' && cat !== curItemFilter) return false;
+
+        if (curItemSubfilter !== 'all') {
+          const sub = (item.subtipo || '').toLowerCase();
+          const p = (item.path || '').toLowerCase();
+          if (curItemSubfilter === 'artefato') {
+            if (!sub.includes('artefato') && !p.includes('artefatos')) return false;
+          } else if (curItemSubfilter === 'veiculo') {
+            if (!sub.includes('veiculo') && !sub.includes('montaria') && !p.includes('veículos')) return false;
+          } else if (sub !== curItemSubfilter) {
+            return false;
+          }
+        }
+
+        return true;
+      }).slice(0, 100);
 
       filtered.forEach(it => {
         const card = document.createElement('div');
         card.className = 'rpg-card';
         const preco = it.preco_ts ? `T$ ${it.preco_ts}` : 'Preço Especial';
         const esp = it.espacos ? `${it.espacos} Espaço(s)` : '0 Espaços';
-        const sub = cleanText(it.subtipo || 'Item');
+        const cat = getItemCategory(it);
+        const subLabel = formatSubtypeLabel(it.subtipo, it);
         const itemName = cleanText(it.nome || it.file_name);
-        const itemDesc = cleanText(it.description || it.resumo || 'Item catalogado do acervo de Arton.');
+        const itemDesc = cleanText(it.description || it.resumo || 'Item catalogado do acervo oficial de Tormenta 20.');
+        const shortDesc = itemDesc.length > 150 ? itemDesc.slice(0, 147) + '...' : itemDesc;
+
+        // Prévia de estatísticas mecânicas
+        let statsPreview = '';
+        if (it.dano) {
+          statsPreview = `<div class="item-stats-preview">💥 Dano: <strong>${it.dano}</strong> • 🎯 Crítico: <strong>${it.critico || 'x2'}</strong> ${it.alcance ? `• 🏹 ${it.alcance}` : ''} ${it.empunhadura ? `• ${it.empunhadura}` : ''}</div>`;
+        } else if (it.bonus_defesa) {
+          statsPreview = `<div class="item-stats-preview">🛡️ Defesa: <strong>+${it.bonus_defesa}</strong> • ⚖️ Penalidade: <strong>${it.penalidade_armadura ?? 0}</strong></div>`;
+        } else if (it.deuses && it.deuses.length) {
+          statsPreview = `<div class="item-stats-preview">📿 Divindade: <strong>${it.deuses.join(', ')}</strong></div>`;
+        }
 
         card.innerHTML = `
           <div class="rpg-card-header">
             <h3>${itemName}</h3>
-            <span class="rpg-badge concedido">${sub}</span>
+            <div style="display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end;">
+              <span class="rpg-badge ${cat}">${cat.toUpperCase()}</span>
+              <span class="rpg-badge subtipo">${subLabel}</span>
+            </div>
           </div>
-          <p class="rpg-card-desc">${itemDesc}</p>
+          ${statsPreview}
+          <p class="rpg-card-desc">${shortDesc}</p>
           <div class="rpg-card-footer">
             <span>💰 ${preco}</span>
-            <span>⚖️ ${esp}</span>
+            <span>🎒 ${esp}</span>
           </div>
         `;
-        card.onclick = () => openModal(itemName, [
-          `Preço: ${preco}`,
-          `Espaços: ${esp}`,
-          `Subtipo: ${sub}`
-        ], `
-          <p><strong>Descrição:</strong> ${itemDesc}</p>
-          ${it.dano ? `<p style="margin-top:8px;"><strong>Dano:</strong> ${cleanText(it.dano)} | <strong>Crítico:</strong> ${cleanText(it.critico || 'x2')}</p><div style="margin-top:12px;"><button type="button" class="btn-roll-atk" onclick="rollWeaponItem('${itemName.replace(/'/g, "\\'")}', '${cleanText(it.dano)}', '${cleanText(it.critico || 'x2')}')">🎲 Rolar Ataque & Dano</button></div>` : ''}
-          ${it.bonus_defesa ? `<p style="margin-top:8px;"><strong>Defesa:</strong> +${it.bonus_defesa}</p>` : ''}
-          ${it.penalidade_armadura ? `<p style="margin-top:8px;"><strong>Penalidade:</strong> ${it.penalidade_armadura}</p>` : ''}
-        `);
+
+        card.onclick = () => openItemModal(it);
         grid.appendChild(card);
       });
+    }
+
+    function openItemModal(it) {
+      playSound('click');
+      const itemName = cleanText(it.nome || it.file_name);
+      const preco = it.preco_ts ? `T$ ${it.preco_ts}` : 'Preço Especial';
+      const esp = it.espacos ? `${it.espacos} Espaço(s)` : '0 Espaços';
+      const cat = getItemCategory(it);
+      const subLabel = formatSubtypeLabel(it.subtipo, it);
+      const itemDesc = cleanText(it.description || it.resumo || 'Item catalogado do acervo oficial de Tormenta 20.');
+
+      const tags = [
+        `Categoria: ${cat.toUpperCase()}`,
+        `Subtipo: ${subLabel}`,
+        `💰 ${preco}`,
+        `🎒 ${esp}`
+      ];
+      if (it.fonte) tags.push(`Fonte: ${cleanText(it.fonte)}`);
+      if (it.deuses && it.deuses.length) tags.push(`Devoção: ${it.deuses.join(', ')}`);
+
+      let statsTableHtml = '';
+      if (it.dano) {
+        statsTableHtml = `
+          <div style="background:#090a10; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:12px;">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:8px; font-size:0.84rem;">
+              <div><span style="color:var(--text-muted);">💥 Dano:</span> <strong>${cleanText(it.dano)}</strong></div>
+              <div><span style="color:var(--text-muted);">🎯 Crítico:</span> <strong>${cleanText(it.critico || 'x2')}</strong></div>
+              <div><span style="color:var(--text-muted);">🩸 Tipo Dano:</span> <strong>${cleanText(it.tipo_dano || '—')}</strong></div>
+              <div><span style="color:var(--text-muted);">🏹 Alcance:</span> <strong>${cleanText(it.alcance || 'Corpo a corpo')}</strong></div>
+              <div><span style="color:var(--text-muted);">✋ Empunhadura:</span> <strong>${cleanText(it.empunhadura || 'Uma mão')}</strong></div>
+            </div>
+            <div style="margin-top:12px;">
+              <button type="button" class="btn-roll-atk" onclick="rollWeaponItem('${itemName.replace(/'/g, "\\'")}', '${cleanText(it.dano)}', '${cleanText(it.critico || 'x2')}'); closeModal();">
+                🎲 Rolar Ataque & Dano (${itemName})
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (it.bonus_defesa) {
+        statsTableHtml = `
+          <div style="background:#090a10; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:12px;">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px; font-size:0.84rem;">
+              <div><span style="color:var(--text-muted);">🛡️ Bônus de Defesa:</span> <strong>+${it.bonus_defesa}</strong></div>
+              <div><span style="color:var(--text-muted);">⚠️ Penalidade:</span> <strong>${it.penalidade_armadura ?? 0}</strong></div>
+              <div><span style="color:var(--text-muted);">🎒 Espaços:</span> <strong>${esp}</strong></div>
+            </div>
+          </div>
+        `;
+      }
+
+      const bodyHtml = `
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          ${statsTableHtml}
+          <div style="background:#090a10; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; line-height:1.6; color:#e2e8f0; font-size:0.92rem;">
+            <h4 style="color:var(--ruby-light); margin-bottom:8px; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.05em;">
+              📜 Regras & Descrição Oficial
+            </h4>
+            ${formatRuleTextToHtml(itemDesc)}
+          </div>
+        </div>
+      `;
+
+      openModal(`${itemName}`, tags, bodyHtml);
     }
 
     document.getElementById('itemSearch').addEventListener('input', renderItems);
@@ -3877,6 +4138,8 @@
         document.querySelectorAll('#itemFilterPills .pill').forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
         curItemFilter = pill.getAttribute('data-filter');
+        curItemSubfilter = 'all';
+        updateItemSubfilters();
         renderItems();
       });
     });
